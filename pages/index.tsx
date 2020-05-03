@@ -17,7 +17,9 @@ const IndexPage = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          <Box>Proof that I can persist state!</Box>
+          <Box>
+            Proof that I can persist state! Try to navigate away and come back
+          </Box>
         </Form>
       </Box>
     </Layout>
