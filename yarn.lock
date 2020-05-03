@@ -925,10 +925,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cabezonidas/shop-ui@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-0.0.6.tgz#89d7c5a20c8ff33340664ca3c2a53b7a1c0a931a"
-  integrity sha512-PMy1T0v+QOLXa/zxJgDwK0p8FCRlYqT1An9UtlzWzvY7eCwZCjK+uKDY4EX+oiqk8MpqW45MkWArYb2sAabF6g==
+"@cabezonidas/shop-ui@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-0.0.9.tgz#9b9e793c9d5db41486c679404cdf0032e0ccb1bf"
+  integrity sha512-sbpPApPl5w6yEnvukoIVw9aX+tke+Sre8br5iOZHwxrfKqxyAc2xxm5t6BnCm6gfqBrDFoE0UioPiD2rUOIJjw==
   dependencies:
     "@emotion/core" "^10.0.27"
     "@emotion/is-prop-valid" "^0.8.6"

@@ -8,7 +8,7 @@
     "type-check": "tsc"
   },
   "dependencies": {
-    "@cabezonidas/shop-ui": "^0.0.6",
+    "@cabezonidas/shop-ui": "^0.0.9",
     "isomorphic-unfetch": "3.0.0",
     "next": "latest",
     "react": "^16.12.0",
