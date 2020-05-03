@@ -1,6 +1,7 @@
 import { AppProps } from "next/app";
 import { UiProvider } from "@cabezonidas/shop-ui";
 import { createContext, useContext, useState } from "react";
+import "@cabezonidas/shop-ui/lib/style.css";
 
 const StateContext = createContext<{
   text?: string;
