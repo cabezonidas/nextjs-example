@@ -8,13 +8,21 @@
     "type-check": "tsc"
   },
   "dependencies": {
-    "@cabezonidas/shop-ui": "^1.0.1",
-    "isomorphic-unfetch": "3.0.0",
-    "next": "latest",
+    "@cabezonidas/shop-ui": "^1.0.41",
+    "apollo-boost": "^0.4.9",
+    "apollo-link": "^1.2.14",
+    "apollo-link-context": "^1.0.20",
+    "cookie": "^0.4.1",
+    "graphql": "^15.1.0",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "9.4.4",
     "react": "^16.12.0",
+    "react-apollo": "^3.1.5",
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
+    "@types/cookie": "^0.4.0",
+    "@types/graphql": "^14.5.0",
     "@types/node": "^12.12.21",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
