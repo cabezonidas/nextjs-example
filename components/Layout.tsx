@@ -1,8 +1,19 @@
 import * as React from "react";
 import Link from "next/link";
 import Head from "next/head";
-import Shell from "./Shell";
-import { useTranslation, Box, styled } from "@cabezonidas/shop-ui";
+import {
+  useTranslation,
+  Box,
+  ResponsiveLayout,
+  TradingClubLatam,
+  HeaderLink,
+  NavLink,
+  FooterLink,
+  Whatsapp,
+  Instagram,
+  Facebook,
+  Messenger,
+} from "@cabezonidas/shop-ui";
 
 type Props = {
   title?: string;
@@ -27,16 +38,6 @@ const esArRoutes = {
   footer: "Estoy para quedarme!",
 };
 
-const Nav = styled(Box)(
-  ({ theme }) => `
-padding: ${theme.space[4]} ${theme.space[4]};
-background: ${theme.colors.neutral.dark};
-color: ${theme.colors.neutral.lightest};
-`
-).withComponent("nav");
-
-const Footer = Nav.withComponent(Nav);
-
 const Layout: React.FunctionComponent<Props> = (props) => {
   const { title, children } = props;
   const { t, i18n } = useTranslation();
@@ -55,31 +56,69 @@ const Layout: React.FunctionComponent<Props> = (props) => {
     true
   );
   return (
-    <Shell display="grid" gridTemplateRows="auto 1fr auto">
+    <ResponsiveLayout
+      header={
+        <Box display="grid" gridTemplateColumns="1fr auto">
+          <TradingClubLatam />
+          <Box alignSelf="center">
+            <Link href="/">
+              <HeaderLink as="span">
+                <a>{t("layout.routes.home")}</a>
+              </HeaderLink>
+            </Link>
+            <Link href="/about">
+              <HeaderLink as="span">
+                <a>{t("layout.routes.about")}</a>
+              </HeaderLink>
+            </Link>
+            <Link href="/users">
+              <HeaderLink as="span">
+                <a>{t("layout.routes.usersList")}</a>
+              </HeaderLink>
+            </Link>
+            <HeaderLink href="/api/users">
+              {t("layout.routes.usersApi")}
+            </HeaderLink>
+          </Box>
+        </Box>
+      }
+      nav={
+        <>
+          <NavLink href="#1">Link 1</NavLink>
+          <NavLink href="#2">Link 2</NavLink>
+        </>
+      }
+      footer={
+        <Box display="flex">
+          <Box
+            display="grid"
+            gridTemplateColumns="repeat(4, 50px)"
+            width="max-width"
+            ml="auto"
+          >
+            <FooterLink href="#3">
+              <Whatsapp />
+            </FooterLink>
+            <FooterLink href="#4">
+              <Instagram />
+            </FooterLink>
+            <FooterLink href="#5">
+              <Facebook />
+            </FooterLink>
+            <FooterLink href="#6">
+              <Messenger />
+            </FooterLink>
+          </Box>
+        </Box>
+      }
+    >
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <header>
-        <Nav display="flex" justifyContent="space-between">
-          <Box display="grid" gridGap="2" gridTemplateColumns="repeat(4, auto)">
-            <Link href="/">
-              <a>{t("layout.routes.home")}</a>
-            </Link>
-            <Link href="/about">
-              <a>{t("layout.routes.about")}</a>
-            </Link>
-            <Link href="/users">
-              <a>{t("layout.routes.usersList")}</a>
-            </Link>
-          </Box>
-          <a href="/api/users">{t("layout.routes.usersApi")}</a>
-        </Nav>
-      </header>
-      <Box>{children}</Box>
-      <Footer>{t("layout.footer")}</Footer>
-    </Shell>
+      {children}
+    </ResponsiveLayout>
   );
 };
 
