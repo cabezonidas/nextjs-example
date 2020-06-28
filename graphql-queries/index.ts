@@ -339,7 +339,7 @@ export type GetStaffQuery = (
   { __typename?: 'Query' }
   & { getStaff: Array<(
     { __typename?: 'User' }
-    & UserFragmentFragment
+    & UserFragment
   )> }
 );
 
@@ -356,7 +356,7 @@ export type PublicPostsQuery = (
     & Pick<LatestPosts, 'total'>
     & { posts: Array<(
       { __typename?: 'Post' }
-      & PostFragmentFragment
+      & PostFragment
     )> }
   ) }
 );
@@ -368,11 +368,11 @@ export type PinnedPostsQuery = (
   { __typename?: 'Query' }
   & { getPinnedPublicPosts: Array<(
     { __typename?: 'Post' }
-    & PostFragmentFragment
+    & PostFragment
   )> }
 );
 
-export type PostFragmentFragment = (
+export type PostFragment = (
   { __typename?: 'Post' }
   & Pick<Post, '_id' | 'starred' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
   & { author?: Maybe<(
@@ -388,7 +388,7 @@ export type PostFragmentFragment = (
   )> }
 );
 
-export type UserFragmentFragment = (
+export type UserFragment = (
   { __typename?: 'User' }
   & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'twitter' | 'roles'>
   & { description?: Maybe<Array<(
@@ -397,8 +397,8 @@ export type UserFragmentFragment = (
   )>> }
 );
 
-export const PostFragmentFragmentDoc = gql`
-    fragment PostFragment on Post {
+export const PostFragmentDoc = gql`
+    fragment Post on Post {
   _id
   starred
   title
@@ -431,8 +431,8 @@ export const PostFragmentFragmentDoc = gql`
   }
 }
     `;
-export const UserFragmentFragmentDoc = gql`
-    fragment UserFragment on User {
+export const UserFragmentDoc = gql`
+    fragment User on User {
   _id
   email
   dob
@@ -455,10 +455,10 @@ export const UserFragmentFragmentDoc = gql`
 export const GetStaffDocument = gql`
     query GetStaff {
   getStaff {
-    ...UserFragment
+    ...User
   }
 }
-    ${UserFragmentFragmentDoc}`;
+    ${UserFragmentDoc}`;
 
 /**
  * __useGetStaffQuery__
@@ -488,12 +488,12 @@ export const PublicPostsDocument = gql`
     query PublicPosts($skip: Float!, $take: Float!) {
   getLatestPublicPosts(skip: $skip, take: $take) {
     posts {
-      ...PostFragment
+      ...Post
     }
     total
   }
 }
-    ${PostFragmentFragmentDoc}`;
+    ${PostFragmentDoc}`;
 
 /**
  * __usePublicPostsQuery__
@@ -524,10 +524,10 @@ export type PublicPostsQueryResult = ApolloReactCommon.QueryResult<PublicPostsQu
 export const PinnedPostsDocument = gql`
     query PinnedPosts {
   getPinnedPublicPosts {
-    ...PostFragment
+    ...Post
   }
 }
-    ${PostFragmentFragmentDoc}`;
+    ${PostFragmentDoc}`;
 
 /**
  * __usePinnedPostsQuery__
