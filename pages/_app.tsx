@@ -1,23 +1,26 @@
 import { AppProps } from "next/app";
+import { ApolloProvider } from "react-apollo";
+import withApollo from "../lib/withApollo";
 import { UiProvider } from "@cabezonidas/shop-ui";
-import { createContext, useContext, useState } from "react";
-import "@cabezonidas/shop-ui/lib/style.css";
+import React from "react";
+import "@reach/dialog/styles.css";
+import "@reach/combobox/styles.css";
+import "highlight.js/styles/default.css";
+import "@cabezonidas/shop-ui/assets/style.css";
+import { ApolloClient, NormalizedCacheObject } from "apollo-boost";
 
-const StateContext = createContext<{
-  text?: string;
-  setText: (t?: string) => void;
-}>(undefined as any);
-export const useAppContext = () => useContext(StateContext);
-
-function MyApp({ Component, pageProps }: AppProps) {
-  const [text, setText] = useState<string>();
+function MyApp({
+  Component,
+  pageProps,
+  apolloClient,
+}: AppProps & { apolloClient: ApolloClient<NormalizedCacheObject> }) {
   return (
-    <UiProvider suspense={false}>
-      <StateContext.Provider value={{ text, setText }}>
+    <ApolloProvider client={apolloClient}>
+      <UiProvider suspense={false}>
         <Component {...pageProps} />
-      </StateContext.Provider>
-    </UiProvider>
+      </UiProvider>
+    </ApolloProvider>
   );
 }
 
-export default MyApp;
+export default withApollo(MyApp);
