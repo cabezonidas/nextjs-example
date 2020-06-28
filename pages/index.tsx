@@ -1,27 +1,28 @@
 import Layout from "../components/Layout";
-import { useAppContext } from "./_app";
-import { Form, Label, Input, Box } from "@cabezonidas/shop-ui";
+import Head from "next/head";
+import { useTranslation, H1 } from "@cabezonidas/shop-ui";
+
+const enUs = {
+  title: "Welcome to Latam Trading Club",
+};
+
+const esAr = {
+  title: "Bienvenidos a Latam Trading Club",
+};
 
 const IndexPage = () => {
-  const { text, setText } = useAppContext();
+  const { t, i18n } = useTranslation();
+  i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
+  i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
+
   return (
-    <Layout title="Home | Next.js + TypeScript Example">
-      <Box p="2" maxWidth="24rem">
-        <Box fontSize="4" mb="3">
-          <h1>Hello Visitor 👋</h1>
-        </Box>
-        <Form onSubmit={(e) => e.preventDefault()}>
-          <Label htmlFor="text">App variable</Label>
-          <Input
-            id="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-          <Box>
-            Proof that I can persist state! Try to navigate away and come back
-          </Box>
-        </Form>
-      </Box>
+    <Layout title="Latam Trading Club">
+      <Head>
+        <title>{"Latam Trading Club"}</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <H1>{t("index.title")}</H1>
     </Layout>
   );
 };
