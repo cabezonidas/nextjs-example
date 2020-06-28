@@ -1,0 +1,19 @@
+fragment UserFragment on User {
+  _id
+  email
+  dob
+  name
+  imageUrl
+  linkedin
+  whatsapp
+  instagram
+  facebook
+  messenger
+  github
+  twitter
+  description {
+    localeId
+    text
+  }
+  roles
+}

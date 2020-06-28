@@ -1,0 +1,8 @@
+query PublicPosts($skip: Float!, $take: Float!) {
+  getLatestPublicPosts(skip: $skip, take: $take) {
+    posts {
+      ...PostFragment
+    }
+    total
+  }
+}
