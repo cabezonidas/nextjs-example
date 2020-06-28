@@ -7,6 +7,7 @@ import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 import fetch from "isomorphic-unfetch";
 import { isBrowser } from "./isBrowser";
+import { graphqlUrl } from "../utils/config";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
@@ -21,7 +22,7 @@ interface Options {
 
 function create(initialState: any, { getToken }: Options) {
   const httpLink = createHttpLink({
-    uri: "http://localhost:8899/graphql",
+    uri: graphqlUrl,
     credentials: "include",
   });
 
