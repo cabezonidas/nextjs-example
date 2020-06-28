@@ -14,6 +14,7 @@ import {
   Facebook,
   Messenger,
 } from "@cabezonidas/shop-ui";
+import { usePinnedPostsQuery } from "../graphql-queries";
 
 type Props = {
   title?: string;
@@ -55,6 +56,7 @@ const Layout: React.FunctionComponent<Props> = (props) => {
     true,
     true
   );
+  const { data } = usePinnedPostsQuery();
   return (
     <ResponsiveLayout
       header={
@@ -84,8 +86,11 @@ const Layout: React.FunctionComponent<Props> = (props) => {
       }
       nav={
         <>
-          <NavLink href="#1">Link 1</NavLink>
-          <NavLink href="#2">Link 2</NavLink>
+          {data?.getPinnedPublicPosts.map((p) => (
+            <Link key={p._id} href={`/pinned/${p._id}`}>
+              <NavLink as="span">{p.title}</NavLink>
+            </Link>
+          ))}
         </>
       }
       footer={
