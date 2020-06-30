@@ -23,18 +23,16 @@ type Props = {
 const enUsRoutes = {
   routes: {
     home: "Home",
-    about: "About",
-    usersList: "Users list",
-    usersApi: "Users API",
+    about: "Us",
+    pinned: "Investements",
   },
   footer: "I'm here to stay!",
 };
 const esArRoutes = {
   routes: {
     home: "Inicio",
-    about: "Acerca",
-    usersList: "Lista de usuarios",
-    usersApi: "API de usuarios",
+    about: "Nosotros",
+    pinned: "Inversiones",
   },
   footer: "Estoy para quedarme!",
 };
@@ -70,26 +68,20 @@ const Layout: React.FunctionComponent<Props> = (props) => {
           <Box display="grid" gridTemplateColumns="1fr auto">
             <TradingClubLatam />
             <Box alignSelf="center">
-              <Link href="/">
-                <HeaderLink>{t("layout.routes.home")}</HeaderLink>
-              </Link>
               <Link href="/pinned">
-                <HeaderLink>Pinned</HeaderLink>
+                <HeaderLink>{t("layout.routes.pinned")}</HeaderLink>
               </Link>
               <Link href="/about">
                 <HeaderLink>{t("layout.routes.about")}</HeaderLink>
               </Link>
-              <Link href="/users">
-                <HeaderLink>{t("layout.routes.usersList")}</HeaderLink>
-              </Link>
-              <HeaderLink href="/api/users">
-                {t("layout.routes.usersApi")}
-              </HeaderLink>
             </Box>
           </Box>
         }
         nav={
           <>
+            <Link href={"/about"}>
+              <NavLink>{t("layout.routes.about")}</NavLink>
+            </Link>
             {data?.getPinnedPublicPosts.map((p) => (
               <Link key={p._id} href={"/pinned/[id]"} as={`/pinned/${p._id}`}>
                 <NavLink>{p.title}</NavLink>
@@ -98,12 +90,14 @@ const Layout: React.FunctionComponent<Props> = (props) => {
           </>
         }
         footer={
-          <Box display="flex">
+          <Box display="flex" justifyContent="space-between">
+            <Link href="/">
+              <FooterLink>{t("layout.routes.home")}</FooterLink>
+            </Link>
             <Box
               display="grid"
               gridTemplateColumns="repeat(4, 50px)"
               width="max-width"
-              ml="auto"
             >
               <FooterLink href="#3">
                 <Whatsapp />
@@ -121,7 +115,9 @@ const Layout: React.FunctionComponent<Props> = (props) => {
           </Box>
         }
       >
-        {children}
+        <Box maxWidth="650px" mx="auto" px="2" pt="4">
+          {children}
+        </Box>
       </ResponsiveLayout>
     </>
   );
