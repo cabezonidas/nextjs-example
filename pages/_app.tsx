@@ -1,19 +1,16 @@
 import { AppProps } from "next/app";
 import { ApolloProvider } from "react-apollo";
-import withApollo from "../lib/withApollo";
 import { UiProvider } from "@cabezonidas/shop-ui";
 import React from "react";
 import "@reach/dialog/styles.css";
 import "@reach/combobox/styles.css";
 import "highlight.js/styles/default.css";
 import "@cabezonidas/shop-ui/assets/style.css";
-import { ApolloClient, NormalizedCacheObject } from "apollo-boost";
+import "./../styles.css";
+import { useApollo } from "../lib/apolloClient";
 
-function MyApp({
-  Component,
-  pageProps,
-  apolloClient,
-}: AppProps & { apolloClient: ApolloClient<NormalizedCacheObject> }) {
+function MyApp({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
   return (
     <ApolloProvider client={apolloClient}>
       <UiProvider suspense={false}>
@@ -23,4 +20,4 @@ function MyApp({
   );
 }
 
-export default withApollo(MyApp);
+export default MyApp;
