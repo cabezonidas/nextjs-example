@@ -57,73 +57,73 @@ const Layout: React.FunctionComponent<Props> = (props) => {
     true
   );
   const { data } = usePinnedPostsQuery();
+
   return (
-    <ResponsiveLayout
-      header={
-        <Box display="grid" gridTemplateColumns="1fr auto">
-          <TradingClubLatam />
-          <Box alignSelf="center">
-            <Link href="/">
-              <HeaderLink as="span">
-                <a>{t("layout.routes.home")}</a>
-              </HeaderLink>
-            </Link>
-            <Link href="/about">
-              <HeaderLink as="span">
-                <a>{t("layout.routes.about")}</a>
-              </HeaderLink>
-            </Link>
-            <Link href="/users">
-              <HeaderLink as="span">
-                <a>{t("layout.routes.usersList")}</a>
-              </HeaderLink>
-            </Link>
-            <HeaderLink href="/api/users">
-              {t("layout.routes.usersApi")}
-            </HeaderLink>
-          </Box>
-        </Box>
-      }
-      nav={
-        <>
-          {data?.getPinnedPublicPosts.map((p) => (
-            <Link key={p._id} href={`/pinned/${p._id}`}>
-              <NavLink as="span">{p.title}</NavLink>
-            </Link>
-          ))}
-        </>
-      }
-      footer={
-        <Box display="flex">
-          <Box
-            display="grid"
-            gridTemplateColumns="repeat(4, 50px)"
-            width="max-width"
-            ml="auto"
-          >
-            <FooterLink href="#3">
-              <Whatsapp />
-            </FooterLink>
-            <FooterLink href="#4">
-              <Instagram />
-            </FooterLink>
-            <FooterLink href="#5">
-              <Facebook />
-            </FooterLink>
-            <FooterLink href="#6">
-              <Messenger />
-            </FooterLink>
-          </Box>
-        </Box>
-      }
-    >
+    <>
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      {children}
-    </ResponsiveLayout>
+      <ResponsiveLayout
+        header={
+          <Box display="grid" gridTemplateColumns="1fr auto">
+            <TradingClubLatam />
+            <Box alignSelf="center">
+              <Link href="/">
+                <HeaderLink>{t("layout.routes.home")}</HeaderLink>
+              </Link>
+              <Link href="/pinned">
+                <HeaderLink>Pinned</HeaderLink>
+              </Link>
+              <Link href="/about">
+                <HeaderLink>{t("layout.routes.about")}</HeaderLink>
+              </Link>
+              <Link href="/users">
+                <HeaderLink>{t("layout.routes.usersList")}</HeaderLink>
+              </Link>
+              <HeaderLink href="/api/users">
+                {t("layout.routes.usersApi")}
+              </HeaderLink>
+            </Box>
+          </Box>
+        }
+        nav={
+          <>
+            {data?.getPinnedPublicPosts.map((p) => (
+              <Link key={p._id} href={"/pinned/[id]"} as={`/pinned/${p._id}`}>
+                <NavLink>{p.title}</NavLink>
+              </Link>
+            ))}
+          </>
+        }
+        footer={
+          <Box display="flex">
+            <Box
+              display="grid"
+              gridTemplateColumns="repeat(4, 50px)"
+              width="max-width"
+              ml="auto"
+            >
+              <FooterLink href="#3">
+                <Whatsapp />
+              </FooterLink>
+              <FooterLink href="#4">
+                <Instagram />
+              </FooterLink>
+              <FooterLink href="#5">
+                <Facebook />
+              </FooterLink>
+              <FooterLink href="#6">
+                <Messenger />
+              </FooterLink>
+            </Box>
+          </Box>
+        }
+      >
+        {children}
+      </ResponsiveLayout>
+    </>
   );
 };
 
