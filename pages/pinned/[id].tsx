@@ -50,8 +50,8 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   try {
     const id = params?.id;
     const item = pinned.find((p) => p._id === id);
-    return { props: { item } };
+    return { props: { item }, unstable_revalidate: 1 };
   } catch (err) {
-    return { props: { errors: err.message }, unstable_revalidate: 1 };
+    return { props: { errors: err.message } };
   }
 };
