@@ -19,6 +19,7 @@ import { usePostTranslation } from "../utils/helpers";
 
 type Props = {
   title?: string | null;
+  onMainScrollBottom?: () => void;
 };
 
 const enUsRoutes = {
@@ -39,7 +40,7 @@ const esArRoutes = {
 };
 
 const Layout: React.FunctionComponent<Props> = (props) => {
-  const { title, children } = props;
+  const { title, children, onMainScrollBottom } = props;
   const { t, i18n } = useTranslation();
   const { getPostTitle } = usePostTranslation();
   i18n.addResourceBundle(
@@ -64,6 +65,7 @@ const Layout: React.FunctionComponent<Props> = (props) => {
         <title>{title}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <ResponsiveLayout
         header={
@@ -123,6 +125,7 @@ const Layout: React.FunctionComponent<Props> = (props) => {
             </Box>
           </Box>
         }
+        onMainScrollBottom={onMainScrollBottom}
       >
         <Box maxWidth="600px" mx="auto" px="2" pt="4">
           {children}
