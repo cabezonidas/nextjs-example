@@ -25,8 +25,11 @@ export type Query = {
   allPostDrafts: Array<Post>;
   getDraft?: Maybe<Post>;
   getPost?: Maybe<Post>;
+  getPublicPost: Post;
   getLatestPublicPosts: LatestPosts;
   getPinnedPublicPosts: Array<Post>;
+  getPinnedPublicPaths: Array<PublicPath>;
+  getPinnedPublicPost: Post;
   getAlbums: Array<Scalars['String']>;
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
@@ -44,9 +47,19 @@ export type QueryGetPostArgs = {
 };
 
 
+export type QueryGetPublicPostArgs = {
+  _id: Scalars['String'];
+};
+
+
 export type QueryGetLatestPublicPostsArgs = {
   take: Scalars['Float'];
   skip: Scalars['Float'];
+};
+
+
+export type QueryGetPinnedPublicPostArgs = {
+  _id: Scalars['String'];
 };
 
 
@@ -123,6 +136,18 @@ export type LatestPosts = {
   __typename?: 'LatestPosts';
   posts: Array<Post>;
   total: Scalars['Float'];
+};
+
+export type PublicPath = {
+  __typename?: 'PublicPath';
+  _id: Scalars['String'];
+  titles: Array<Title>;
+};
+
+export type Title = {
+  __typename?: 'Title';
+  localeId: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type AwsPhoto = {
@@ -332,24 +357,13 @@ export type LocalizedDescription = {
 };
 
 
-export type GetStaffQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetStaffQuery = (
-  { __typename?: 'Query' }
-  & { getStaff: Array<(
-    { __typename?: 'User' }
-    & UserFragment
-  )> }
-);
-
-export type PublicPostsQueryVariables = Exact<{
+export type GetLatestPublicPostsQueryVariables = Exact<{
   skip: Scalars['Float'];
   take: Scalars['Float'];
 }>;
 
 
-export type PublicPostsQuery = (
+export type GetLatestPublicPostsQuery = (
   { __typename?: 'Query' }
   & { getLatestPublicPosts: (
     { __typename?: 'LatestPosts' }
@@ -361,14 +375,66 @@ export type PublicPostsQuery = (
   ) }
 );
 
-export type PinnedPostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetPinnedPublicPathsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PinnedPostsQuery = (
+export type GetPinnedPublicPathsQuery = (
+  { __typename?: 'Query' }
+  & { getPinnedPublicPaths: Array<(
+    { __typename?: 'PublicPath' }
+    & Pick<PublicPath, '_id'>
+    & { titles: Array<(
+      { __typename?: 'Title' }
+      & Pick<Title, 'localeId' | 'title'>
+    )> }
+  )> }
+);
+
+export type GetPinnedPublicPostQueryVariables = Exact<{
+  _id: Scalars['String'];
+}>;
+
+
+export type GetPinnedPublicPostQuery = (
+  { __typename?: 'Query' }
+  & { getPinnedPublicPost: (
+    { __typename?: 'Post' }
+    & PostFragment
+  ) }
+);
+
+export type GetPinnedPublicPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPinnedPublicPostsQuery = (
   { __typename?: 'Query' }
   & { getPinnedPublicPosts: Array<(
     { __typename?: 'Post' }
     & PostFragment
+  )> }
+);
+
+export type GetPublicPostQueryVariables = Exact<{
+  _id: Scalars['String'];
+}>;
+
+
+export type GetPublicPostQuery = (
+  { __typename?: 'Query' }
+  & { getPublicPost: (
+    { __typename?: 'Post' }
+    & PostFragment
+  ) }
+);
+
+export type GetStaffQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetStaffQuery = (
+  { __typename?: 'Query' }
+  & { getStaff: Array<(
+    { __typename?: 'User' }
+    & UserFragment
   )> }
 );
 
@@ -452,6 +518,177 @@ export const UserFragmentDoc = gql`
   roles
 }
     `;
+export const GetLatestPublicPostsDocument = gql`
+    query GetLatestPublicPosts($skip: Float!, $take: Float!) {
+  getLatestPublicPosts(skip: $skip, take: $take) {
+    posts {
+      ...Post
+    }
+    total
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __useGetLatestPublicPostsQuery__
+ *
+ * To run a query within a React component, call `useGetLatestPublicPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestPublicPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestPublicPostsQuery({
+ *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
+ *   },
+ * });
+ */
+export function useGetLatestPublicPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetLatestPublicPostsQuery, GetLatestPublicPostsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetLatestPublicPostsQuery, GetLatestPublicPostsQueryVariables>(GetLatestPublicPostsDocument, baseOptions);
+      }
+export function useGetLatestPublicPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetLatestPublicPostsQuery, GetLatestPublicPostsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetLatestPublicPostsQuery, GetLatestPublicPostsQueryVariables>(GetLatestPublicPostsDocument, baseOptions);
+        }
+export type GetLatestPublicPostsQueryHookResult = ReturnType<typeof useGetLatestPublicPostsQuery>;
+export type GetLatestPublicPostsLazyQueryHookResult = ReturnType<typeof useGetLatestPublicPostsLazyQuery>;
+export type GetLatestPublicPostsQueryResult = ApolloReactCommon.QueryResult<GetLatestPublicPostsQuery, GetLatestPublicPostsQueryVariables>;
+export const GetPinnedPublicPathsDocument = gql`
+    query GetPinnedPublicPaths {
+  getPinnedPublicPaths {
+    _id
+    titles {
+      localeId
+      title
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPinnedPublicPathsQuery__
+ *
+ * To run a query within a React component, call `useGetPinnedPublicPathsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPinnedPublicPathsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPinnedPublicPathsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPinnedPublicPathsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPinnedPublicPathsQuery, GetPinnedPublicPathsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetPinnedPublicPathsQuery, GetPinnedPublicPathsQueryVariables>(GetPinnedPublicPathsDocument, baseOptions);
+      }
+export function useGetPinnedPublicPathsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPinnedPublicPathsQuery, GetPinnedPublicPathsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetPinnedPublicPathsQuery, GetPinnedPublicPathsQueryVariables>(GetPinnedPublicPathsDocument, baseOptions);
+        }
+export type GetPinnedPublicPathsQueryHookResult = ReturnType<typeof useGetPinnedPublicPathsQuery>;
+export type GetPinnedPublicPathsLazyQueryHookResult = ReturnType<typeof useGetPinnedPublicPathsLazyQuery>;
+export type GetPinnedPublicPathsQueryResult = ApolloReactCommon.QueryResult<GetPinnedPublicPathsQuery, GetPinnedPublicPathsQueryVariables>;
+export const GetPinnedPublicPostDocument = gql`
+    query GetPinnedPublicPost($_id: String!) {
+  getPinnedPublicPost(_id: $_id) {
+    ...Post
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __useGetPinnedPublicPostQuery__
+ *
+ * To run a query within a React component, call `useGetPinnedPublicPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPinnedPublicPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPinnedPublicPostQuery({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useGetPinnedPublicPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPinnedPublicPostQuery, GetPinnedPublicPostQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetPinnedPublicPostQuery, GetPinnedPublicPostQueryVariables>(GetPinnedPublicPostDocument, baseOptions);
+      }
+export function useGetPinnedPublicPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPinnedPublicPostQuery, GetPinnedPublicPostQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetPinnedPublicPostQuery, GetPinnedPublicPostQueryVariables>(GetPinnedPublicPostDocument, baseOptions);
+        }
+export type GetPinnedPublicPostQueryHookResult = ReturnType<typeof useGetPinnedPublicPostQuery>;
+export type GetPinnedPublicPostLazyQueryHookResult = ReturnType<typeof useGetPinnedPublicPostLazyQuery>;
+export type GetPinnedPublicPostQueryResult = ApolloReactCommon.QueryResult<GetPinnedPublicPostQuery, GetPinnedPublicPostQueryVariables>;
+export const GetPinnedPublicPostsDocument = gql`
+    query GetPinnedPublicPosts {
+  getPinnedPublicPosts {
+    ...Post
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __useGetPinnedPublicPostsQuery__
+ *
+ * To run a query within a React component, call `useGetPinnedPublicPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPinnedPublicPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPinnedPublicPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPinnedPublicPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPinnedPublicPostsQuery, GetPinnedPublicPostsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetPinnedPublicPostsQuery, GetPinnedPublicPostsQueryVariables>(GetPinnedPublicPostsDocument, baseOptions);
+      }
+export function useGetPinnedPublicPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPinnedPublicPostsQuery, GetPinnedPublicPostsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetPinnedPublicPostsQuery, GetPinnedPublicPostsQueryVariables>(GetPinnedPublicPostsDocument, baseOptions);
+        }
+export type GetPinnedPublicPostsQueryHookResult = ReturnType<typeof useGetPinnedPublicPostsQuery>;
+export type GetPinnedPublicPostsLazyQueryHookResult = ReturnType<typeof useGetPinnedPublicPostsLazyQuery>;
+export type GetPinnedPublicPostsQueryResult = ApolloReactCommon.QueryResult<GetPinnedPublicPostsQuery, GetPinnedPublicPostsQueryVariables>;
+export const GetPublicPostDocument = gql`
+    query GetPublicPost($_id: String!) {
+  getPublicPost(_id: $_id) {
+    ...Post
+  }
+}
+    ${PostFragmentDoc}`;
+
+/**
+ * __useGetPublicPostQuery__
+ *
+ * To run a query within a React component, call `useGetPublicPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPublicPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPublicPostQuery({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useGetPublicPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPublicPostQuery, GetPublicPostQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetPublicPostQuery, GetPublicPostQueryVariables>(GetPublicPostDocument, baseOptions);
+      }
+export function useGetPublicPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPublicPostQuery, GetPublicPostQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetPublicPostQuery, GetPublicPostQueryVariables>(GetPublicPostDocument, baseOptions);
+        }
+export type GetPublicPostQueryHookResult = ReturnType<typeof useGetPublicPostQuery>;
+export type GetPublicPostLazyQueryHookResult = ReturnType<typeof useGetPublicPostLazyQuery>;
+export type GetPublicPostQueryResult = ApolloReactCommon.QueryResult<GetPublicPostQuery, GetPublicPostQueryVariables>;
 export const GetStaffDocument = gql`
     query GetStaff {
   getStaff {
@@ -484,72 +721,3 @@ export function useGetStaffLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type GetStaffQueryHookResult = ReturnType<typeof useGetStaffQuery>;
 export type GetStaffLazyQueryHookResult = ReturnType<typeof useGetStaffLazyQuery>;
 export type GetStaffQueryResult = ApolloReactCommon.QueryResult<GetStaffQuery, GetStaffQueryVariables>;
-export const PublicPostsDocument = gql`
-    query PublicPosts($skip: Float!, $take: Float!) {
-  getLatestPublicPosts(skip: $skip, take: $take) {
-    posts {
-      ...Post
-    }
-    total
-  }
-}
-    ${PostFragmentDoc}`;
-
-/**
- * __usePublicPostsQuery__
- *
- * To run a query within a React component, call `usePublicPostsQuery` and pass it any options that fit your needs.
- * When your component renders, `usePublicPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePublicPostsQuery({
- *   variables: {
- *      skip: // value for 'skip'
- *      take: // value for 'take'
- *   },
- * });
- */
-export function usePublicPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PublicPostsQuery, PublicPostsQueryVariables>) {
-        return ApolloReactHooks.useQuery<PublicPostsQuery, PublicPostsQueryVariables>(PublicPostsDocument, baseOptions);
-      }
-export function usePublicPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PublicPostsQuery, PublicPostsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<PublicPostsQuery, PublicPostsQueryVariables>(PublicPostsDocument, baseOptions);
-        }
-export type PublicPostsQueryHookResult = ReturnType<typeof usePublicPostsQuery>;
-export type PublicPostsLazyQueryHookResult = ReturnType<typeof usePublicPostsLazyQuery>;
-export type PublicPostsQueryResult = ApolloReactCommon.QueryResult<PublicPostsQuery, PublicPostsQueryVariables>;
-export const PinnedPostsDocument = gql`
-    query PinnedPosts {
-  getPinnedPublicPosts {
-    ...Post
-  }
-}
-    ${PostFragmentDoc}`;
-
-/**
- * __usePinnedPostsQuery__
- *
- * To run a query within a React component, call `usePinnedPostsQuery` and pass it any options that fit your needs.
- * When your component renders, `usePinnedPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePinnedPostsQuery({
- *   variables: {
- *   },
- * });
- */
-export function usePinnedPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PinnedPostsQuery, PinnedPostsQueryVariables>) {
-        return ApolloReactHooks.useQuery<PinnedPostsQuery, PinnedPostsQueryVariables>(PinnedPostsDocument, baseOptions);
-      }
-export function usePinnedPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PinnedPostsQuery, PinnedPostsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<PinnedPostsQuery, PinnedPostsQueryVariables>(PinnedPostsDocument, baseOptions);
-        }
-export type PinnedPostsQueryHookResult = ReturnType<typeof usePinnedPostsQuery>;
-export type PinnedPostsLazyQueryHookResult = ReturnType<typeof usePinnedPostsLazyQuery>;
-export type PinnedPostsQueryResult = ApolloReactCommon.QueryResult<PinnedPostsQuery, PinnedPostsQueryVariables>;

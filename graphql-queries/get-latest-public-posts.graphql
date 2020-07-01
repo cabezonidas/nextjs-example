@@ -1,4 +1,4 @@
-query PublicPosts($skip: Float!, $take: Float!) {
+query GetLatestPublicPosts($skip: Float!, $take: Float!) {
   getLatestPublicPosts(skip: $skip, take: $take) {
     posts {
       ...Post

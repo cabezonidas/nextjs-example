@@ -1,0 +1,5 @@
+query GetPublicPost($_id: String!) {
+  getPublicPost(_id: $_id) {
+    ...Post
+  }
+}

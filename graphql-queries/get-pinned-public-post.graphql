@@ -1,0 +1,5 @@
+query GetPinnedPublicPost($_id: String!) {
+  getPinnedPublicPost(_id: $_id) {
+    ...Post
+  }
+}

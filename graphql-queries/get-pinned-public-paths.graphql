@@ -1,0 +1,9 @@
+query GetPinnedPublicPaths {
+  getPinnedPublicPaths {
+    _id
+    titles {
+      localeId
+      title
+    }
+  }
+}
