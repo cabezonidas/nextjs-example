@@ -1,7 +1,12 @@
 import React from "react";
 import Layout from "../../components/Layout";
 import { initializeApollo } from "../../lib/apolloClient";
-import { PinnedPostsDocument, PinnedPostsQuery } from "../../graphql-queries";
+import {
+  GetPinnedPublicPathsDocument,
+  GetPinnedPublicPathsQuery,
+  GetPinnedPublicPostQuery,
+  GetPinnedPublicPostDocument,
+} from "../../graphql-queries";
 import {
   GetStaticPaths,
   InferGetStaticPropsType,
@@ -28,11 +33,11 @@ export default PinnedDetail;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const apollo = initializeApollo();
-  const { data } = await apollo.query<PinnedPostsQuery>({
-    query: PinnedPostsDocument,
+  const { data } = await apollo.query<GetPinnedPublicPathsQuery>({
+    query: GetPinnedPublicPathsDocument,
   });
 
-  const paths = data.getPinnedPublicPosts.map((p) => ({
+  const paths = data.getPinnedPublicPaths.map((p) => ({
     params: { id: p._id },
   }));
 
@@ -41,16 +46,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const apollo = initializeApollo();
-  const {
-    data: { getPinnedPublicPosts: pinned },
-  } = await apollo.query<PinnedPostsQuery>({
-    query: PinnedPostsDocument,
-  });
-
   try {
-    const id = params?.id;
-    const item = pinned.find((p) => p._id === id);
-    return { props: { item }, unstable_revalidate: 1 };
+    const {
+      data: { getPinnedPublicPost: pinned },
+    } = await apollo.query<GetPinnedPublicPostQuery>({
+      query: GetPinnedPublicPostDocument,
+      variables: { _id: params?.id },
+    });
+    return { props: { item: pinned }, unstable_revalidate: 1 };
   } catch (err) {
     return { props: { errors: err.message } };
   }
