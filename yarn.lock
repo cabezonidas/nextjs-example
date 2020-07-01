@@ -1298,10 +1298,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cabezonidas/shop-ui@^1.0.44":
-  version "1.0.44"
-  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-1.0.44.tgz#0bcb8872dcabf6eb75dc1173151524a044c8a4a2"
-  integrity sha512-Xm/x97B0SBs3UYSL9ibziXSU6qGwIznRGQOo4jzCTZSMeIexPEdpHuIfVPzDbTN53L8hyh99yVINThDlc9cKcQ==
+"@cabezonidas/shop-ui@^1.0.45":
+  version "1.0.45"
+  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-1.0.45.tgz#1db1ece0ecc147062d205bb0d7fa767995130285"
+  integrity sha512-Kr0JSO5A7OBpATDOeVj0YW8wYT+EmKHei5DNDDekUrRLw2vupfdQOVZ7Gtqt2EFKCUFocCbmJIdCFw6SnfP3Aw==
   dependencies:
     "@emotion/core" "^10.0.27"
     "@emotion/is-prop-valid" "^0.8.6"
