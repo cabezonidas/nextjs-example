@@ -12,6 +12,7 @@ import { usePostTranslation } from "../utils/helpers";
 import { Fragment, useState, useEffect, useMemo } from "react";
 import { PostPreview } from "../components/PostPreview";
 import { companyName } from "../utils/config";
+import Link from "next/link";
 
 const enUs = {
   olderPosts: "Previous entries",
@@ -63,7 +64,13 @@ const IndexPage = ({
                 return (
                   <Fragment key={index}>
                     {translatedOld && (
-                      <PostPreview p="4" data={translatedOld} />
+                      <Link href="/[id]" as={`/${old._id}`}>
+                        <PostPreview
+                          p="4"
+                          data={translatedOld}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </Link>
                     )}
                   </Fragment>
                 );
