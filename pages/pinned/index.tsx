@@ -43,7 +43,7 @@ const Pinned = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
         tempora? Voluptatum, accusamus repudiandae? Similique, doloribus!
       </Paragraph>
       <H3 mb="4">Lorem ipsum dolor sit amet.</H3>
-      <Box display="grid" gridGap="6" mt="2">
+      <Box display="grid" gridGap="6" my="2">
         {items?.map((pinned, index) => {
           const translatedPinned = getTranslatedPost(pinned);
           return (

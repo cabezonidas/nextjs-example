@@ -51,13 +51,14 @@ export const PostPreview = forwardRef<HTMLDivElement, IPostView>(
         display={sizedMainImage ? "grid" : undefined}
         gridGap={sizedMainImage ? "2" : undefined}
         gridTemplateColumns={sizedMainImage ? "1fr auto" : undefined}
+        overflow="hidden"
         {...boxProps}
       >
-        <Box>
+        <Box overflow="hidden">
           {data.title && <H3 mb="4">{data.title}</H3>}
           {data.description && <Box>{data.description}</Box>}
           {data.author && (
-            <Box my="4">
+            <Box my="4" overflow="hidden">
               <PostDate data={data} my="6" />
             </Box>
           )}

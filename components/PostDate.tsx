@@ -42,13 +42,18 @@ export const PostDate = forwardRef<HTMLDivElement, IPostDate>((props, ref) => {
           width="max-content"
           gridTemplateColumns="auto 1fr"
           gridGap="2"
+          maxWidth="100%"
+          overflow="hidden"
           ref={ref}
           {...boxProps}
         >
           {data.created && (
             <>
               <Box>{t("postView.created")}</Box>
-              <Box>
+              <Box
+                overflow="hidden"
+                style={{ whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+              >
                 {DateTime.fromMillis(data.created).toLocaleString(
                   DateTime.DATETIME_SHORT
                 )}
@@ -58,7 +63,10 @@ export const PostDate = forwardRef<HTMLDivElement, IPostDate>((props, ref) => {
           {data.updated && data.updated !== data.created && (
             <>
               <Box>{t("postView.updated")}</Box>
-              <Box>
+              <Box
+                overflow="hidden"
+                style={{ whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+              >
                 {DateTime.fromMillis(data.updated).toLocaleString(
                   DateTime.DATETIME_SHORT
                 )}
