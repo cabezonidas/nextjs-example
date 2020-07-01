@@ -15,9 +15,10 @@ import {
   Messenger,
 } from "@cabezonidas/shop-ui";
 import { useGetPinnedPublicPathsQuery } from "../graphql-queries";
+import { usePostTranslation } from "../utils/helpers";
 
 type Props = {
-  title?: string;
+  title?: string | null;
 };
 
 const enUsRoutes = {
@@ -40,6 +41,7 @@ const esArRoutes = {
 const Layout: React.FunctionComponent<Props> = (props) => {
   const { title, children } = props;
   const { t, i18n } = useTranslation();
+  const { getPostTitle } = usePostTranslation();
   i18n.addResourceBundle(
     "en-US",
     "translation",
@@ -66,7 +68,9 @@ const Layout: React.FunctionComponent<Props> = (props) => {
       <ResponsiveLayout
         header={
           <Box display="grid" gridTemplateColumns="1fr auto">
-            <TradingClubLatam />
+            <Link href="/">
+              <TradingClubLatam style={{ cursor: "pointer" }} />
+            </Link>
             <Box alignSelf="center">
               <Link href="/pinned">
                 <HeaderLink>{t("layout.routes.pinned")}</HeaderLink>
@@ -79,18 +83,16 @@ const Layout: React.FunctionComponent<Props> = (props) => {
         }
         nav={
           <>
+            <Link href="/">
+              <NavLink>{t("layout.routes.home")}</NavLink>
+            </Link>
             <Link href={"/about"}>
               <NavLink>{t("layout.routes.about")}</NavLink>
             </Link>
             {data?.getPinnedPublicPaths.map((i) => {
-              const postTitle =
-                (
-                  i.titles.find((title) => title.localeId === i18n.language) ||
-                  i.titles[0]
-                )?.title ?? "";
               return (
                 <Link key={i._id} href={"/pinned/[id]"} as={`/pinned/${i._id}`}>
-                  <NavLink>{postTitle}</NavLink>
+                  <NavLink>{getPostTitle(i.titles)}</NavLink>
                 </Link>
               );
             })}
@@ -122,7 +124,7 @@ const Layout: React.FunctionComponent<Props> = (props) => {
           </Box>
         }
       >
-        <Box maxWidth="650px" mx="auto" px="2" pt="4">
+        <Box maxWidth="600px" mx="auto" px="2" pt="4">
           {children}
         </Box>
       </ResponsiveLayout>
