@@ -12,21 +12,52 @@ import {
   InferGetStaticPropsType,
   GetStaticPropsContext,
 } from "next";
+import { usePostTranslation } from "../../utils/helpers";
+import { useTranslation } from "@cabezonidas/shop-ui";
+import { PostView } from "../../components/PostView";
+
+const enUs = {
+  noTitle: "Untitled",
+  notFound: "Entry not found",
+};
+const esAr = {
+  noTitle: "Sin título",
+  notFound: "Entrada no encontrada",
+};
 
 export const PinnedDetail = ({
   item,
   errors,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { getTranslatedPost } = usePostTranslation();
+  const { t, i18n } = useTranslation();
+  i18n.addResourceBundle("en-US", "translation", { pinned: enUs }, true, true);
+  i18n.addResourceBundle("es-AR", "translation", { pinned: esAr }, true, true);
+  const translatedPost = getTranslatedPost(item);
+  const title = getTranslatedPost(item)?.title ?? t("pinned.noTitle");
   if (errors) {
     return (
-      <Layout title={`Error | Next.js + TypeScript Example`}>
+      <Layout title={title}>
         <p>
           <span style={{ color: "red" }}>Error:</span> {errors}
         </p>
       </Layout>
     );
   }
-  return <Layout title={`Pinned Posts`}>{item?.title}</Layout>;
+  if (translatedPost) {
+    return (
+      <Layout title={title}>
+        <PostView data={translatedPost} />
+      </Layout>
+    );
+  }
+  return (
+    <Layout title={title}>
+      <p>
+        <span style={{ color: "red" }}>Error:</span> {t("pinned.notFound")}
+      </p>
+    </Layout>
+  );
 };
 
 export default PinnedDetail;
