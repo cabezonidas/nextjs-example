@@ -443,13 +443,13 @@ export type PostFragment = (
   & Pick<Post, '_id' | 'starred' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
   & { author?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'name' | 'email'>
+    & UserFragment
   )>, translations: Array<(
     { __typename?: 'PostData' }
     & Pick<PostData, 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
     & { author?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, '_id' | 'name' | 'email'>
+      & UserFragment
     )> }
   )> }
 );
@@ -463,40 +463,6 @@ export type UserFragment = (
   )>> }
 );
 
-export const PostFragmentDoc = gql`
-    fragment Post on Post {
-  _id
-  starred
-  title
-  description
-  body
-  created
-  language
-  published
-  updated
-  tags
-  author {
-    _id
-    name
-    email
-  }
-  translations {
-    title
-    description
-    body
-    created
-    language
-    published
-    updated
-    tags
-    author {
-      _id
-      name
-      email
-    }
-  }
-}
-    `;
 export const UserFragmentDoc = gql`
     fragment User on User {
   _id
@@ -518,6 +484,36 @@ export const UserFragmentDoc = gql`
   roles
 }
     `;
+export const PostFragmentDoc = gql`
+    fragment Post on Post {
+  _id
+  starred
+  title
+  description
+  body
+  created
+  language
+  published
+  updated
+  tags
+  author {
+    ...User
+  }
+  translations {
+    title
+    description
+    body
+    created
+    language
+    published
+    updated
+    tags
+    author {
+      ...User
+    }
+  }
+}
+    ${UserFragmentDoc}`;
 export const GetLatestPublicPostsDocument = gql`
     query GetLatestPublicPosts($skip: Float!, $take: Float!) {
   getLatestPublicPosts(skip: $skip, take: $take) {

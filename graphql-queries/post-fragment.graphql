@@ -10,9 +10,7 @@ fragment Post on Post {
   updated
   tags
   author {
-    _id
-    name
-    email
+    ...User
   }
   translations {
     title
@@ -24,9 +22,7 @@ fragment Post on Post {
     updated
     tags
     author {
-      _id
-      name
-      email
+      ...User
     }
   }
 }
