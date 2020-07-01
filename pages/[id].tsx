@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../components/Layout";
 import { initializeApollo } from "../lib/apolloClient";
 import {
@@ -6,6 +6,8 @@ import {
   GetPublicPostDocument,
   GetLatestPublicPostsQuery,
   GetLatestPublicPostsDocument,
+  useGetLatestPublicPostsLazyQuery,
+  Post,
 } from "../graphql-queries";
 import {
   GetStaticPaths,
@@ -13,16 +15,19 @@ import {
   GetStaticPropsContext,
 } from "next";
 import { usePostTranslation } from "../utils/helpers";
-import { useTranslation } from "@cabezonidas/shop-ui";
+import { useTranslation, H1, Box } from "@cabezonidas/shop-ui";
 import { PostView } from "../components/PostView";
+import { companyName } from "../utils/config";
+import Link from "next/link";
+import { PostPreview } from "../components/PostPreview";
 
 const enUs = {
-  noTitle: "Untitled",
   notFound: "Entry not found",
+  otherPosts: "Other entries",
 };
 const esAr = {
-  noTitle: "Sin título",
   notFound: "Entrada no encontrada",
+  otherPosts: "Otras entradas",
 };
 
 export const PostDetail = ({
@@ -34,28 +39,82 @@ export const PostDetail = ({
   i18n.addResourceBundle("en-US", "translation", { post: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { post: esAr }, true, true);
   const translatedPost = getTranslatedPost(item);
-  const title = getTranslatedPost(item)?.title ?? t("post.noTitle");
+  const title = getTranslatedPost(item)?.title ?? companyName;
+
+  const [otherPostsTotal, setOtherPostsTotal] = useState<number>();
+  const [otherPosts, setOtherPosts] = useState<Post[]>([]);
+  const [fetchMore, { loading, data }] = useGetLatestPublicPostsLazyQuery();
+
+  useEffect(() => {
+    if (data?.getLatestPublicPosts) {
+      setOtherPosts((op) => [...op, ...data.getLatestPublicPosts.posts]);
+      setOtherPostsTotal(Math.max(data.getLatestPublicPosts.total - 1, 0));
+    }
+  }, [data]);
+
+  const onScroll = () => {
+    if (
+      !loading &&
+      (otherPostsTotal === undefined || otherPosts.length < otherPostsTotal)
+    ) {
+      fetchMore({ variables: { skip: otherPosts.length + 1, take: 3 } });
+    }
+  };
+
+  const otherPostsBlock = (
+    <>
+      {otherPosts.length > 0 && (
+        <>
+          <H1 mt="6" mb="2">
+            {t("post.otherPosts")}
+          </H1>
+          <Box display="grid" gridGap="6" mb="6">
+            {otherPosts.map((old, index) => {
+              const translatedOld = getTranslatedPost(old);
+              return (
+                <Fragment key={index}>
+                  {translatedOld && old._id !== item?._id && (
+                    <Link href="/[id]" as={`/${old._id}`}>
+                      <PostPreview
+                        p="4"
+                        data={translatedOld}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </Link>
+                  )}
+                </Fragment>
+              );
+            })}
+          </Box>
+        </>
+      )}
+    </>
+  );
+
   if (errors) {
     return (
-      <Layout title={title}>
+      <Layout title={title} onMainScrollBottom={onScroll}>
         <p>
           <span style={{ color: "red" }}>Error:</span> {errors}
         </p>
+        {otherPostsBlock}
       </Layout>
     );
   }
   if (translatedPost) {
     return (
-      <Layout title={title}>
+      <Layout title={title} onMainScrollBottom={onScroll}>
         <PostView data={translatedPost} />
+        {otherPostsBlock}
       </Layout>
     );
   }
   return (
-    <Layout title={title}>
+    <Layout title={title} onMainScrollBottom={onScroll}>
       <p>
         <span style={{ color: "red" }}>Error:</span> {t("post.notFound")}
       </p>
+      {otherPostsBlock}
     </Layout>
   );
 };
