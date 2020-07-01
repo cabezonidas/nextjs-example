@@ -14,7 +14,7 @@ import {
   Facebook,
   Messenger,
 } from "@cabezonidas/shop-ui";
-import { usePinnedPostsQuery } from "../graphql-queries";
+import { useGetPinnedPublicPathsQuery } from "../graphql-queries";
 
 type Props = {
   title?: string;
@@ -54,7 +54,7 @@ const Layout: React.FunctionComponent<Props> = (props) => {
     true,
     true
   );
-  const { data } = usePinnedPostsQuery();
+  const { data } = useGetPinnedPublicPathsQuery();
 
   return (
     <>
@@ -82,11 +82,18 @@ const Layout: React.FunctionComponent<Props> = (props) => {
             <Link href={"/about"}>
               <NavLink>{t("layout.routes.about")}</NavLink>
             </Link>
-            {data?.getPinnedPublicPosts.map((p) => (
-              <Link key={p._id} href={"/pinned/[id]"} as={`/pinned/${p._id}`}>
-                <NavLink>{p.title}</NavLink>
-              </Link>
-            ))}
+            {data?.getPinnedPublicPaths.map((i) => {
+              const postTitle =
+                (
+                  i.titles.find((title) => title.localeId === i18n.language) ||
+                  i.titles[0]
+                )?.title ?? "";
+              return (
+                <Link key={i._id} href={"/pinned/[id]"} as={`/pinned/${i._id}`}>
+                  <NavLink>{postTitle}</NavLink>
+                </Link>
+              );
+            })}
           </>
         }
         footer={
