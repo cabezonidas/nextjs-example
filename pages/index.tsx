@@ -9,7 +9,7 @@ import {
 import { InferGetStaticPropsType } from "next";
 import { PostView } from "../components/PostView";
 import { usePostTranslation } from "../utils/helpers";
-import { Fragment, useState, useEffect, useMemo } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { PostPreview } from "../components/PostPreview";
 import { companyName } from "../utils/config";
 import Link from "next/link";
@@ -31,7 +31,9 @@ const IndexPage = ({
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
 
   const [latest, ...rest] = items.posts;
-  const oldPostsTotal = useMemo(() => Math.max(items.total - 1, 0), []);
+  const [oldPostsTotal, setOldPostsTotal] = useState(
+    Math.max(items.total - 1, 0)
+  );
   const translatedLatest = getTranslatedPost(latest);
 
   const [olderPosts, setOlderPosts] = useState(rest);
@@ -40,17 +42,19 @@ const IndexPage = ({
   useEffect(() => {
     if (data?.getLatestPublicPosts) {
       setOlderPosts((op) => [...op, ...data.getLatestPublicPosts.posts]);
+      setOldPostsTotal(Math.max(data.getLatestPublicPosts.total - 1, 0));
     }
   }, [data]);
 
   const onScroll = () => {
     if (!loading && olderPosts.length < oldPostsTotal) {
-      fetchMore({ variables: { skip: olderPosts.length + 1, take: 1 } });
+      fetchMore({ variables: { skip: olderPosts.length + 1, take: 3 } });
     }
   };
+  const title = getTranslatedPost(latest)?.title ?? companyName;
 
   return (
-    <Layout title={companyName} onMainScrollBottom={onScroll}>
+    <Layout title={title} onMainScrollBottom={onScroll}>
       <Box>
         {translatedLatest && <PostView data={translatedLatest} />}
         {olderPosts.length > 0 && (
