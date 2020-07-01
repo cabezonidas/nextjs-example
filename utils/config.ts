@@ -4,3 +4,4 @@ export const baseUrl =
     ? "http://localhost:8899"
     : "https://api.javascript.kiwi";
 export const graphqlUrl = `${baseUrl}/graphql`;
+export const companyName = "Latam Trading Club";
