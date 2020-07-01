@@ -102,13 +102,11 @@ const Layout: React.FunctionComponent<Props> = (props) => {
         }
         footer={
           <Box display="flex" justifyContent="space-between">
-            <Link href="/">
-              <FooterLink>{t("layout.routes.home")}</FooterLink>
-            </Link>
             <Box
               display="grid"
               gridTemplateColumns="repeat(4, 50px)"
               width="max-width"
+              ml="auto"
             >
               <FooterLink href="#3">
                 <Whatsapp />
