@@ -41,7 +41,6 @@ export const PostView = forwardRef<HTMLDivElement, IPostView>((props, ref) => {
   const { data, ...boxProps } = props;
   return (
     <Box ref={ref} {...boxProps}>
-      <hr />
       <Markdown body={data.body ?? ""} />
       {data.tags && <PillsBox my="1" tags={data.tags} />}
       {data.author && (
