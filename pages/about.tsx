@@ -1,8 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
-import { GetStaffDocument, GetStaffQuery } from "../graphql-queries";
-import { initializeApollo } from "../lib/apolloClient";
-import { InferGetStaticPropsType } from "next";
+import { useGetStaffQuery } from "../graphql-queries";
 import {
   useTranslation,
   H1,
@@ -40,12 +38,11 @@ const esAr = {
   team: "Nuestro equipo",
 };
 
-const AboutPage = ({
-  staff,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const AboutPage = () => {
   const { t, i18n } = useTranslation();
   i18n.addResourceBundle("en-US", "translation", { about: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { about: esAr }, true, true);
+  const { data } = useGetStaffQuery();
   return (
     <Layout title={t("about.title")}>
       <H1 mb="4">{t("about.title")}</H1>
@@ -58,7 +55,7 @@ const AboutPage = ({
         <Paragraph>{t("about.valuesBody")}</Paragraph>
         <H2>{t("about.team")}</H2>
         <Box display="grid">
-          {staff.map((s) => (
+          {data?.getStaff.map((s) => (
             <ProfileCard key={s._id} author={s as any} />
           ))}
         </Box>
@@ -68,12 +65,3 @@ const AboutPage = ({
 };
 
 export default AboutPage;
-
-export const getStaticProps = async () => {
-  const apollo = initializeApollo();
-  const { data } = await apollo.query<GetStaffQuery>({
-    query: GetStaffDocument,
-  });
-
-  return { props: { staff: data.getStaff }, unstable_revalidate: 1 };
-};
