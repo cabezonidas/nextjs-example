@@ -42,6 +42,7 @@ const Pinned = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
     true
   );
   const { getTranslatedPost } = usePostMapping();
+  // TODO Add description to investments
   return (
     <Layout title="Pinned">
       <H1>{t("pinnedIndex.title")}</H1>

@@ -12,16 +12,31 @@ import {
   Box,
 } from "@cabezonidas/shop-ui";
 
+// TODO: Translate english texts!
 const enUs = {
   title: "Us",
   mission: "Mission",
+  missionBody:
+    "Proporcionar acceso al sistema financiero del mundo en un solo clic. Juntos trabajamos en invertir el dinero para mejorar la vida cotidiana de las personas.",
   vision: "Vision",
+  visionBody:
+    "Ser un empresa global, responsable maximizando el rendimiento para los inversores y aportando para un mundo mejor.",
+  values: "Valores",
+  valuesBody:
+    "Excelencia, Honestidad, Transparencia, responsabilidad y pasión.",
   team: "Our team",
 };
 const esAr = {
   title: "Nosotros",
   mission: "Misión",
+  missionBody:
+    "Proporcionar acceso al sistema financiero del mundo en un solo clic. Juntos trabajamos en invertir el dinero para mejorar la vida cotidiana de las personas.",
   vision: "Visión",
+  visionBody:
+    "Ser un empresa global, responsable maximizando el rendimiento para los inversores y aportando para un mundo mejor.",
+  values: "Valores",
+  valuesBody:
+    "Excelencia, Honestidad, Transparencia, responsabilidad y pasión.",
   team: "Nuestro equipo",
 };
 
@@ -36,16 +51,11 @@ const AboutPage = ({
       <H1 mb="4">{t("about.title")}</H1>
       <Box display="grid" gridGap="4">
         <H2>{t("about.mission")}</H2>
-        <Paragraph>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum,
-          tempora? Voluptatum, accusamus repudiandae? Similique, doloribus!
-        </Paragraph>
+        <Paragraph>{t("about.missionBody")}</Paragraph>
         <H2>{t("about.vision")}</H2>
-        <Paragraph>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-          Reprehenderit velit repudiandae ullam corrupti vitae veniam
-          praesentium cupiditate reiciendis officiis suscipit?
-        </Paragraph>
+        <Paragraph>{t("about.visionBody")}</Paragraph>
+        <H2>{t("about.values")}</H2>
+        <Paragraph>{t("about.valuesBody")}</Paragraph>
         <H2>{t("about.team")}</H2>
         <Box display="grid">
           {staff.map((s) => (
