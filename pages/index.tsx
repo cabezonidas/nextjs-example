@@ -66,7 +66,7 @@ const IndexPage = ({
     <Layout title={title} onMainScrollBottom={onScroll}>
       <Box>
         {translatedLatest && <PostView data={translatedLatest} />}
-        {olderPosts.length > 0 && (
+        {!!olderPosts.length && (
           <>
             <H1 mt="6" mb="2">
               {t("index.olderPosts")}
