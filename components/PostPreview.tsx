@@ -1,12 +1,6 @@
 import React, { forwardRef, ComponentProps } from "react";
 import { PostData } from "../graphql-queries";
-import {
-  Box,
-  useTranslation,
-  H3,
-  listImagesFromRawMarkdown,
-  transform,
-} from "@cabezonidas/shop-ui";
+import { Box, useTranslation, H3 } from "@cabezonidas/shop-ui";
 import { PostDate } from "./PostDate";
 import { usePostMapping } from "../utils/helpers";
 
