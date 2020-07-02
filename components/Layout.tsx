@@ -13,6 +13,7 @@ import {
   Instagram,
   Facebook,
   Messenger,
+  Email,
 } from "@cabezonidas/shop-ui";
 import { useGetPinnedPublicPathsQuery } from "../graphql-queries";
 import { usePostMapping } from "../utils/helpers";
@@ -113,20 +114,23 @@ const Layout: React.FunctionComponent<Props> = (props) => {
           <Box display="flex" justifyContent="space-between">
             <Box
               display="grid"
-              gridTemplateColumns="repeat(4, 50px)"
+              gridTemplateColumns="repeat(5, 50px)"
               width="max-width"
               ml="auto"
             >
-              <FooterLink href="#3">
+              <FooterLink href="mailto:latamtradingclub@gmail.com">
+                <Email />
+              </FooterLink>
+              <FooterLink href="https://api.whatsapp.com/send?phone=+5491151398747">
                 <Whatsapp />
               </FooterLink>
-              <FooterLink href="#4">
+              <FooterLink href="https://www.instagram.com/tradingclublatam">
                 <Instagram />
               </FooterLink>
-              <FooterLink href="#5">
+              <FooterLink href="https://www.facebook.com/latamtradingclub">
                 <Facebook />
               </FooterLink>
-              <FooterLink href="#6">
+              <FooterLink href="https://www.messenger.com/t/latamtradingclub">
                 <Messenger />
               </FooterLink>
             </Box>
