@@ -15,7 +15,8 @@ import {
   Messenger,
 } from "@cabezonidas/shop-ui";
 import { useGetPinnedPublicPathsQuery } from "../graphql-queries";
-import { usePostTranslation } from "../utils/helpers";
+import { usePostMapping } from "../utils/helpers";
+import { companyName } from "../utils/config";
 
 type Props = {
   title?: string | null;
@@ -42,7 +43,7 @@ const esArRoutes = {
 const Layout: React.FunctionComponent<Props> = (props) => {
   const { title, children, onMainScrollBottom } = props;
   const { t, i18n } = useTranslation();
-  const { getPostTitle } = usePostTranslation();
+  const { getPostTitle } = usePostMapping();
   i18n.addResourceBundle(
     "en-US",
     "translation",
@@ -66,18 +67,21 @@ const Layout: React.FunctionComponent<Props> = (props) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="shortcut icon" href="/favicon.ico" />
+        <meta property="og:locale" content="es_AR" />
+        <meta property="og:locale:alternate" content="en_US" />
+        <meta property="og:site_name" content={companyName} />
       </Head>
       <ResponsiveLayout
         header={
           <Box display="grid" gridTemplateColumns="1fr auto">
-            <Link href="/">
+            <Link href="/" passHref={true}>
               <TradingClubLatam style={{ cursor: "pointer" }} />
             </Link>
             <Box alignSelf="center">
-              <Link href="/pinned">
+              <Link href="/pinned" passHref={true}>
                 <HeaderLink>{t("layout.routes.pinned")}</HeaderLink>
               </Link>
-              <Link href="/about">
+              <Link href="/about" passHref={true}>
                 <HeaderLink>{t("layout.routes.about")}</HeaderLink>
               </Link>
             </Box>
@@ -85,15 +89,20 @@ const Layout: React.FunctionComponent<Props> = (props) => {
         }
         nav={
           <>
-            <Link href="/">
+            <Link href="/" passHref={true}>
               <NavLink>{t("layout.routes.home")}</NavLink>
             </Link>
-            <Link href={"/about"}>
+            <Link href={"/about"} passHref={true}>
               <NavLink>{t("layout.routes.about")}</NavLink>
             </Link>
             {data?.getPinnedPublicPaths.map((i) => {
               return (
-                <Link key={i._id} href={"/pinned/[id]"} as={`/pinned/${i._id}`}>
+                <Link
+                  key={i._id}
+                  href={"/pinned/[id]"}
+                  as={`/pinned/${i._id}`}
+                  passHref={true}
+                >
                   <NavLink>{getPostTitle(i.titles)}</NavLink>
                 </Link>
               );
