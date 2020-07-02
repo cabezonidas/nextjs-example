@@ -8,6 +8,7 @@ import {
   transform,
 } from "@cabezonidas/shop-ui";
 import { PostDate } from "./PostDate";
+import { usePostMapping } from "../utils/helpers";
 
 interface IPostView extends Omit<ComponentProps<typeof Box>, "children"> {
   data: Omit<PostData, "__typename">;
@@ -37,11 +38,9 @@ export const PostPreview = forwardRef<HTMLDivElement, IPostView>(
 
     const { data, ...boxProps } = props;
 
-    const [mainImage] = listImagesFromRawMarkdown(data.body ?? "");
+    const { getPreviewImage } = usePostMapping();
 
-    const sizedMainImage = mainImage
-      ? transform(mainImage, { height: "150px", width: "150px" })
-      : undefined;
+    const sizedMainImage = getPreviewImage(data.body);
 
     return (
       <Box
