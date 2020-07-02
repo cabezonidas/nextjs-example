@@ -65,6 +65,7 @@ const IndexPage = ({
   console.log({
     branch: process.env.VERCEL_GITHUB_COMMIT_REF,
     url: process.env.VERCEL_URL,
+    stage: process.env.NEXT_PUBLIC_ENV,
   });
 
   return (
