@@ -11,6 +11,8 @@ import { PostDate } from "./PostDate";
 import Head from "next/head";
 import { usePostMapping } from "../utils/helpers";
 import { DateTime } from "luxon";
+import { useRouter } from "next/router";
+import { websiteUrl } from "../utils/config";
 
 interface IPostView extends Omit<ComponentProps<typeof Box>, "children"> {
   data: Omit<PostData, "__typename">;
@@ -50,7 +52,7 @@ export const PostView = forwardRef<HTMLDivElement, IPostView>((props, ref) => {
     ? data.author.name ?? data.author.email
     : undefined;
 
-  const url = typeof location !== "undefined" ? location.href : undefined;
+  const { asPath } = useRouter();
 
   return (
     <>
@@ -75,14 +77,14 @@ export const PostView = forwardRef<HTMLDivElement, IPostView>((props, ref) => {
           />
         )}
         {data.tags?.map((tag) => (
-          <meta property="article:tag" content="tag" key={tag} />
+          <meta property="article:tag" content={tag} key={tag} />
         ))}
         {data.description && (
           <meta property="og:description" content={data.description} />
         )}
 
         {author && <meta property="article:author" content={author} />}
-        {url && <meta property="og:url" content={url} />}
+        <meta property="og:url" content={websiteUrl + asPath} />
         {previewImage && <meta property="og:image" content={previewImage} />}
       </Head>
       <Box ref={ref} {...boxProps}>
