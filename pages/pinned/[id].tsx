@@ -12,7 +12,7 @@ import {
   InferGetStaticPropsType,
   GetStaticPropsContext,
 } from "next";
-import { usePostTranslation } from "../../utils/helpers";
+import { usePostMapping } from "../../utils/helpers";
 import { useTranslation } from "@cabezonidas/shop-ui";
 import { PostView } from "../../components/PostView";
 
@@ -29,7 +29,7 @@ export const PinnedDetail = ({
   item,
   errors,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { getTranslatedPost } = usePostTranslation();
+  const { getTranslatedPost } = usePostMapping();
   const { t, i18n } = useTranslation();
   i18n.addResourceBundle("en-US", "translation", { pinned: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { pinned: esAr }, true, true);

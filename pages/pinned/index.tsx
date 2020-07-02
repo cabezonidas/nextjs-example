@@ -5,9 +5,16 @@ import {
   GetPinnedPublicPostsDocument,
   GetPinnedPublicPostsQuery,
 } from "../../graphql-queries";
-import { Box, useTranslation, Paragraph, H1, H3 } from "@cabezonidas/shop-ui";
+import {
+  Box,
+  useTranslation,
+  Paragraph,
+  H1,
+  H3,
+  Anchor,
+} from "@cabezonidas/shop-ui";
 import Link from "next/link";
-import { usePostTranslation } from "../../utils/helpers";
+import { usePostMapping } from "../../utils/helpers";
 import { Fragment } from "react";
 import { PostPreview } from "../../components/PostPreview";
 
@@ -34,7 +41,7 @@ const Pinned = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
     true,
     true
   );
-  const { getTranslatedPost } = usePostTranslation();
+  const { getTranslatedPost } = usePostMapping();
   return (
     <Layout title="Pinned">
       <H1>{t("pinnedIndex.title")}</H1>
@@ -49,12 +56,18 @@ const Pinned = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
           return (
             <Fragment key={index}>
               {translatedPinned && (
-                <Link href="/pinned/[id]" as={`/pinned/${pinned._id}`}>
-                  <PostPreview
-                    p="4"
-                    style={{ cursor: "pointer" }}
-                    data={translatedPinned}
-                  />
+                <Link
+                  href="/pinned/[id]"
+                  as={`/pinned/${pinned._id}`}
+                  passHref={true}
+                >
+                  <Anchor>
+                    <PostPreview
+                      p="4"
+                      style={{ cursor: "pointer" }}
+                      data={translatedPinned}
+                    />
+                  </Anchor>
                 </Link>
               )}
             </Fragment>
