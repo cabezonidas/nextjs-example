@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
-import Layout from "../components/Layout";
-import { initializeApollo } from "../lib/apolloClient";
+import Layout from "../../components/Layout";
+import { initializeApollo } from "../../lib/apolloClient";
 import {
   GetPublicPostQuery,
   GetPublicPostDocument,
@@ -8,18 +8,19 @@ import {
   GetLatestPublicPostsDocument,
   useGetLatestPublicPostsLazyQuery,
   Post,
-} from "../graphql-queries";
+} from "../../graphql-queries";
 import {
   GetStaticPaths,
   InferGetStaticPropsType,
   GetStaticPropsContext,
 } from "next";
-import { usePostTranslation } from "../utils/helpers";
-import { useTranslation, H1, Box } from "@cabezonidas/shop-ui";
-import { PostView } from "../components/PostView";
-import { companyName } from "../utils/config";
+import { usePostMapping } from "../../utils/helpers";
+import { useTranslation, H1, Box, Anchor } from "@cabezonidas/shop-ui";
+import { PostView } from "../../components/PostView";
+import { companyName } from "../../utils/config";
 import Link from "next/link";
-import { PostPreview } from "../components/PostPreview";
+import { PostPreview } from "../../components/PostPreview";
+import { useRouter } from "next/router";
 
 const enUs = {
   notFound: "Entry not found",
@@ -34,7 +35,7 @@ export const PostDetail = ({
   item,
   errors,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { getTranslatedPost } = usePostTranslation();
+  const { getTranslatedPost } = usePostMapping();
   const { t, i18n } = useTranslation();
   i18n.addResourceBundle("en-US", "translation", { post: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { post: esAr }, true, true);
@@ -52,6 +53,12 @@ export const PostDetail = ({
     }
   }, [data]);
 
+  useEffect(() => {
+    if (!loading && otherPostsTotal === undefined) {
+      fetchMore({ variables: { skip: otherPosts.length + 1, take: 3 } });
+    }
+  }, [otherPostsTotal, fetchMore, otherPosts.length]);
+
   const onScroll = () => {
     if (
       !loading &&
@@ -60,6 +67,8 @@ export const PostDetail = ({
       fetchMore({ variables: { skip: otherPosts.length + 1, take: 3 } });
     }
   };
+
+  const { asPath } = useRouter();
 
   const otherPostsBlock = (
     <>
@@ -74,12 +83,16 @@ export const PostDetail = ({
               return (
                 <Fragment key={index}>
                   {translatedOld && old._id !== item?._id && (
-                    <Link href="/[id]" as={`/${old._id}`}>
-                      <PostPreview
-                        p="4"
-                        data={translatedOld}
-                        style={{ cursor: "pointer" }}
-                      />
+                    <Link
+                      href="/posts/[id]"
+                      as={`/posts/${old._id}`}
+                      passHref={true}
+                      scroll={true}
+                      replace={true}
+                    >
+                      <Anchor>
+                        <PostPreview p="4" data={translatedOld} />
+                      </Anchor>
                     </Link>
                   )}
                 </Fragment>
@@ -103,7 +116,7 @@ export const PostDetail = ({
   }
   if (translatedPost) {
     return (
-      <Layout title={title} onMainScrollBottom={onScroll}>
+      <Layout title={title} onMainScrollBottom={onScroll} key={asPath}>
         <PostView data={translatedPost} />
         {otherPostsBlock}
       </Layout>

@@ -1,5 +1,5 @@
 import Layout from "../components/Layout";
-import { useTranslation, H1, Box } from "@cabezonidas/shop-ui";
+import { useTranslation, H1, Box, Anchor } from "@cabezonidas/shop-ui";
 import { initializeApollo } from "../lib/apolloClient";
 import {
   GetLatestPublicPostsDocument,
@@ -8,7 +8,7 @@ import {
 } from "../graphql-queries";
 import { InferGetStaticPropsType } from "next";
 import { PostView } from "../components/PostView";
-import { usePostTranslation } from "../utils/helpers";
+import { usePostMapping } from "../utils/helpers";
 import { Fragment, useState, useEffect } from "react";
 import { PostPreview } from "../components/PostPreview";
 import { companyName } from "../utils/config";
@@ -26,7 +26,7 @@ const IndexPage = ({
   items,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { t, i18n } = useTranslation();
-  const { getTranslatedPost } = usePostTranslation();
+  const { getTranslatedPost } = usePostMapping();
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
 
@@ -37,6 +37,7 @@ const IndexPage = ({
   const translatedLatest = getTranslatedPost(latest);
 
   const [olderPosts, setOlderPosts] = useState(rest);
+  const [hasRefetchedOnce, setHasRefetchedOnce] = useState(false);
 
   const [fetchMore, { loading, data }] = useGetLatestPublicPostsLazyQuery();
   useEffect(() => {
@@ -48,9 +49,17 @@ const IndexPage = ({
 
   const onScroll = () => {
     if (!loading && olderPosts.length < oldPostsTotal) {
-      fetchMore({ variables: { skip: olderPosts.length + 1, take: 3 } });
+      fetchMore({ variables: { skip: olderPosts.length + 1, take: 1 } });
     }
   };
+
+  useEffect(() => {
+    if (!hasRefetchedOnce) {
+      setHasRefetchedOnce(true);
+      onScroll();
+    }
+  }, [onScroll, hasRefetchedOnce]);
+
   const title = getTranslatedPost(latest)?.title ?? companyName;
 
   return (
@@ -68,12 +77,15 @@ const IndexPage = ({
                 return (
                   <Fragment key={index}>
                     {translatedOld && (
-                      <Link href="/[id]" as={`/${old._id}`}>
-                        <PostPreview
-                          p="4"
-                          data={translatedOld}
-                          style={{ cursor: "pointer" }}
-                        />
+                      <Link
+                        href="/posts/[id]"
+                        as={`/posts/${old._id}`}
+                        passHref={true}
+                        replace={true}
+                      >
+                        <Anchor>
+                          <PostPreview p="4" data={translatedOld} />
+                        </Anchor>
                       </Link>
                     )}
                   </Fragment>
