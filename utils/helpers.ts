@@ -1,7 +1,11 @@
-import { useTranslation } from "@cabezonidas/shop-ui";
+import {
+  useTranslation,
+  listImagesFromRawMarkdown,
+  transform,
+} from "@cabezonidas/shop-ui";
 import { Title, Post, PostData } from "../graphql-queries";
 
-export const usePostTranslation = () => {
+export const usePostMapping = () => {
   const {
     i18n: { language },
   } = useTranslation();
@@ -31,5 +35,30 @@ export const usePostTranslation = () => {
     }
     return result;
   };
-  return { getPostTitle, getTranslatedPost };
+
+  const getFirstPostImage = (post?: Post | string | null) => {
+    if (post) {
+      const [mainImage] = listImagesFromRawMarkdown(
+        typeof post === "string" ? post : getTranslatedPost(post)?.body ?? ""
+      );
+      return mainImage;
+    }
+    return;
+  };
+
+  const getPreviewImage = (post?: Post | string | null) => {
+    const mainImage = getFirstPostImage(post);
+    return mainImage
+      ? transform(mainImage, { width: "150px", height: "150px" })
+      : undefined;
+  };
+
+  const getMetaImage = (post?: Post | string | null) => {
+    const mainImage = getFirstPostImage(post);
+    return mainImage
+      ? transform(mainImage, { width: "600px", height: "315px" })
+      : undefined;
+  };
+
+  return { getPostTitle, getTranslatedPost, getPreviewImage, getMetaImage };
 };
