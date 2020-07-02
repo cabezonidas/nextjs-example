@@ -62,6 +62,11 @@ const IndexPage = ({
 
   const title = getTranslatedPost(latest)?.title ?? companyName;
 
+  console.log({
+    branch: process.env.VERCEL_GITHUB_COMMIT_REF,
+    url: process.env.VERCEL_URL,
+  });
+
   return (
     <Layout title={title} onMainScrollBottom={onScroll}>
       <Box>
