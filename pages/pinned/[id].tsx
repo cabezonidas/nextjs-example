@@ -86,6 +86,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     });
     return { props: { item: pinned }, revalidate: 1 };
   } catch (err) {
-    return { props: { errors: err.message } };
+    return { props: { errors: err.message }, revalidate: 1 };
   }
 };

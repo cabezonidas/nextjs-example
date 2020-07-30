@@ -159,6 +159,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     });
     return { props: { item: post }, revalidate: 1 };
   } catch (err) {
-    return { props: { errors: err.message } };
+    return { props: { errors: err.message }, revalidate: 1 };
   }
 };
