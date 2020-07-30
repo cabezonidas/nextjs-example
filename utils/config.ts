@@ -9,11 +9,11 @@ const baseDomain = (() => {
     };
   } else {
     return {
-      api: "https://api.latamtradingclub.com",
-      website: "https://latamtradingclub.com",
+      api: "https://api.lataminvestingclub.com",
+      website: "https://lataminvestingclub.com",
     };
   }
 })();
 export const websiteUrl = baseDomain.website;
 export const graphqlUrl = `${baseDomain.api}/graphql`;
-export const companyName = "Latam Trading Club";
+export const companyName = "Latam Investing Club";
