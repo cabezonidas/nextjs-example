@@ -84,8 +84,8 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
       query: GetPinnedPublicPostDocument,
       variables: { _id: params?.id },
     });
-    return { props: { item: pinned }, unstable_revalidate: 1 };
+    return { props: { item: pinned }, revalidate: 1 };
   } catch (err) {
-    return { props: { errors: err.message } };
+    return { props: { errors: err.message }, revalidate: 1 };
   }
 };

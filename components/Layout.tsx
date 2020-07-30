@@ -5,7 +5,7 @@ import {
   useTranslation,
   Box,
   ResponsiveLayout,
-  TradingClubLatam,
+  InvestingClubLatam,
   HeaderLink,
   NavLink,
   FooterLink,
@@ -76,7 +76,7 @@ const Layout: React.FunctionComponent<Props> = (props) => {
         header={
           <Box display="grid" gridTemplateColumns="1fr auto">
             <Link href="/" passHref={true}>
-              <TradingClubLatam style={{ cursor: "pointer" }} />
+              <InvestingClubLatam style={{ cursor: "pointer" }} />
             </Link>
             <Box alignSelf="center">
               <Link href="/pinned" passHref={true}>

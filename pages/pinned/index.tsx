@@ -87,7 +87,7 @@ export const getStaticProps = async () => {
 
   return {
     props: { items: data.getPinnedPublicPosts },
-    unstable_revalidate: 1,
+    revalidate: 1,
   };
 };
 
