@@ -44,7 +44,7 @@ const AboutPage = () => {
   i18n.addResourceBundle("es-AR", "translation", { about: esAr }, true, true);
   const { data } = useGetStaffQuery();
   return (
-    <Layout title={t("about.title")}>
+    <Layout documentTitle={t("about.title")}>
       <H1 mb="4">{t("about.title")}</H1>
       <Box display="grid" gridGap="4">
         <H2>{t("about.mission")}</H2>
@@ -54,7 +54,7 @@ const AboutPage = () => {
         <H2>{t("about.values")}</H2>
         <Paragraph>{t("about.valuesBody")}</Paragraph>
         <H2>{t("about.team")}</H2>
-        <Box display="grid">
+        <Box display="grid" gridGap="6">
           {data?.getStaff.map((s) => (
             <ProfileCard key={s._id} author={s as any} />
           ))}
