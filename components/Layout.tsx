@@ -20,7 +20,7 @@ import { usePostMapping } from "../utils/helpers";
 import { companyName } from "../utils/config";
 
 type Props = {
-  title?: string | null;
+  documentTitle?: string | null;
   onMainScrollBottom?: () => void;
 };
 
@@ -41,8 +41,11 @@ const esArRoutes = {
   footer: "Estoy para quedarme!",
 };
 
-const Layout: React.FunctionComponent<Props> = (props) => {
-  const { title, children, onMainScrollBottom } = props;
+const Layout = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<typeof Box> & Props
+>((props, ref) => {
+  const { documentTitle, children, onMainScrollBottom, ...boxProps } = props;
   const { t, i18n } = useTranslation();
   const { getPostTitle } = usePostMapping();
   i18n.addResourceBundle(
@@ -64,13 +67,15 @@ const Layout: React.FunctionComponent<Props> = (props) => {
   return (
     <>
       <Head>
-        <title>{title}</title>
+        {documentTitle && <title>{documentTitle}</title>}
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta property="og:locale" content="es_AR" />
         <meta property="og:locale:alternate" content="en_US" />
         <meta property="og:site_name" content={companyName} />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/ScrollTrigger.min.js"></script>
       </Head>
       <ResponsiveLayout
         header={
@@ -138,12 +143,12 @@ const Layout: React.FunctionComponent<Props> = (props) => {
         }
         onMainScrollBottom={onMainScrollBottom}
       >
-        <Box maxWidth="600px" mx="auto" px="2" pt="4">
+        <Box ref={ref} maxWidth="600px" mx="auto" px="2" pt="4" {...boxProps}>
           {children}
         </Box>
       </ResponsiveLayout>
     </>
   );
-};
+});
 
 export default Layout;

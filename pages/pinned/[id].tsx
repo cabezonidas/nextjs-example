@@ -37,7 +37,7 @@ export const PinnedDetail = ({
   const title = getTranslatedPost(item)?.title ?? t("pinned.noTitle");
   if (errors) {
     return (
-      <Layout title={title}>
+      <Layout documentTitle={title}>
         <p>
           <span style={{ color: "red" }}>Error:</span> {errors}
         </p>
@@ -46,13 +46,13 @@ export const PinnedDetail = ({
   }
   if (translatedPost) {
     return (
-      <Layout title={title}>
+      <Layout documentTitle={title}>
         <PostView data={translatedPost} />
       </Layout>
     );
   }
   return (
-    <Layout title={title}>
+    <Layout documentTitle={title}>
       <p>
         <span style={{ color: "red" }}>Error:</span> {t("pinned.notFound")}
       </p>

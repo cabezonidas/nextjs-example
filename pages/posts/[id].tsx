@@ -106,7 +106,7 @@ export const PostDetail = ({
 
   if (errors) {
     return (
-      <Layout title={title} onMainScrollBottom={onScroll}>
+      <Layout documentTitle={title} onMainScrollBottom={onScroll}>
         <p>
           <span style={{ color: "red" }}>Error:</span> {errors}
         </p>
@@ -116,14 +116,14 @@ export const PostDetail = ({
   }
   if (translatedPost) {
     return (
-      <Layout title={title} onMainScrollBottom={onScroll} key={asPath}>
+      <Layout documentTitle={title} onMainScrollBottom={onScroll} key={asPath}>
         <PostView data={translatedPost} />
         {otherPostsBlock}
       </Layout>
     );
   }
   return (
-    <Layout title={title} onMainScrollBottom={onScroll}>
+    <Layout documentTitle={title} onMainScrollBottom={onScroll}>
       <p>
         <span style={{ color: "red" }}>Error:</span> {t("post.notFound")}
       </p>
