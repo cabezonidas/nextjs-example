@@ -9,6 +9,7 @@ import {
   ProfileCard,
   Box,
 } from "@cabezonidas/shop-ui";
+import { AboutCommitment } from "../components/about/AboutCommitment";
 
 // TODO: Translate english texts!
 const enUs = {
@@ -53,6 +54,7 @@ const AboutPage = () => {
         <Paragraph>{t("about.visionBody")}</Paragraph>
         <H2>{t("about.values")}</H2>
         <Paragraph>{t("about.valuesBody")}</Paragraph>
+        <AboutCommitment />
         <H2>{t("about.team")}</H2>
         <Box display="grid" gridGap="6">
           {data?.getStaff.map((s) => (
