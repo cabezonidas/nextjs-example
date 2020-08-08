@@ -1,52 +1,53 @@
 import { useTranslation, H1, Box } from "@cabezonidas/shop-ui";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
-import { Section } from "./Section";
 import { useInView } from "react-intersection-observer";
+import { useState, useEffect } from "react";
 
 const esAr = {};
 
 const enUs = {};
 
-export const Section5 = () => {
+export const AboutCommitment = () => {
   const { i18n } = useTranslation();
 
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
   const [ref, inView] = useInView({ threshold: 0.2 });
+  const [inViewOnce, setInViewOnce] = useState(inView);
+  useEffect(() => {
+    inView && setInViewOnce(true);
+  }, [inView]);
 
   return (
     <>
       <StyledSection
         ref={ref}
-        px="5"
-        py="8"
         display="flex"
         flexDirection="column"
         flex="1 auto"
       >
         <Title
-          mb="4"
           style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? "translateY(0px)" : "translateY(-30px)",
+            opacity: inViewOnce ? 1 : 0,
+            transform: inViewOnce ? "translateY(0px)" : "translateY(-30px)",
             transition: "all 1s",
           }}
         >
-          Nuestro compromiso
+          Compromiso
         </Title>
         <UnorderedList
           display="flex"
           flexDirection="column"
           justifyContent="space-between"
           height="100%"
-          py="6"
+          pt="2"
           maxWidth="600px"
           alignSelf="center"
-          inView={inView}
+          inView={inViewOnce}
         >
           <ListItem>
-            Latam Trading Club selecciona unidades premium y con mayor potencial
-            de crecimiento y oportunidad de negocio.
+            Latam Investing Club selecciona unidades premium y con mayor
+            potencial de crecimiento y oportunidad de negocio.
           </ListItem>
           <ListItem>
             Creamos un crowdfunding para facilitar el acceso a inversiones
@@ -87,18 +88,16 @@ const UnorderedList = styled(Box.withComponent("ul"))<{ inView?: boolean }>(
 
 const ListItem = styled(Box.withComponent("li"))(({ theme: { colors } }) => ({
   background: colors.neutral.mediumDark,
-  margin: 5,
-  padding: 10,
+  margin: "5px 0",
+  padding: "10px",
   borderRadius: "5px",
   boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
 }));
 
-const StyledSection = styled(Section)(({ theme: { colors } }) => ({
-  textAlign: "center",
-  background: colors.neutral.dark,
+const StyledSection = styled(Box)(({ theme: { colors } }) => ({
   color: colors.neutral.light,
   position: "relative",
-}));
+})).withComponent("section");
 
 const Title = styled(H1)((props) => ({
   fontSize: props.theme.fontSizes[4],

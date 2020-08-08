@@ -15,7 +15,7 @@ const esAr = {};
 
 const enUs = {};
 
-export const Section4 = () => {
+export const HomeClients = () => {
   const { i18n } = useTranslation();
 
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);

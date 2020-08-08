@@ -1,12 +1,9 @@
 import Layout from "../components/Layout";
 import { companyName } from "../utils/config";
-import { Section1 } from "../components/home/Section1";
-import { Section2 } from "../components/home/Section2";
-import { Section3 } from "../components/home/Section3";
-import { Section4 } from "../components/home/Section4";
-import { Section5 } from "../components/home/Section5";
-import { Section6 } from "../components/home/Section6";
-import { Section7 } from "../components/home/Section7";
+import { HomeLanding } from "../components/home/HomeLanding";
+import { HomeFlorida } from "../components/home/HomeFlorida";
+import { HomeProcess } from "../components/home/HomeProcess";
+import { HomeHow } from "../components/home/HomeHow";
 import "intersection-observer";
 
 const IndexPage = () => {
@@ -24,13 +21,11 @@ const IndexPage = () => {
         overflow="auto"
         style={{ scrollSnapType: "y mandatory" }}
       >
-        <Section1 />
-        <Section2 />
-        <Section3 />
-        <Section4 />
-        <Section5 />
-        <Section6 />
-        <Section7 />
+        <HomeLanding />
+        <HomeProcess />
+        <HomeFlorida />
+        {/* <HomeClients /> */}
+        <HomeHow />
       </Layout>
     </>
   );
