@@ -139,7 +139,7 @@ const UnorderedList = styled(Box.withComponent("ul"))<{ inView?: boolean }>(
     li: {
       opacity: inView === false ? 0 : 1,
       transform: inView === false ? "translateY(200%)" : "translateY(0%)",
-      transition: "all 0.6s ease",
+      transition: "transform 0.6s ease, opacity 0.6s ease",
       transitionDelay: "0.55s",
     },
     "li:nth-of-type(1)": { transitionDelay: "0.15s" },
