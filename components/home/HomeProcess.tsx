@@ -1,6 +1,5 @@
 import {
   useTranslation,
-  H1,
   Box,
   Span,
   Paragraph,
