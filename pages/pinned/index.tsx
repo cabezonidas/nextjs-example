@@ -5,14 +5,7 @@ import {
   GetPinnedPublicPostsDocument,
   GetPinnedPublicPostsQuery,
 } from "../../graphql-queries";
-import {
-  Box,
-  useTranslation,
-  Paragraph,
-  H1,
-  H3,
-  Anchor,
-} from "@cabezonidas/shop-ui";
+import { Box, useTranslation, H1, H3, Anchor } from "@cabezonidas/shop-ui";
 import Link from "next/link";
 import { usePostMapping } from "../../utils/helpers";
 import { Fragment } from "react";
@@ -46,11 +39,7 @@ const Pinned = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <Layout documentTitle="Pinned">
       <H1>{t("pinnedIndex.title")}</H1>
-      <Paragraph my="4">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum,
-        tempora? Voluptatum, accusamus repudiandae? Similique, doloribus!
-      </Paragraph>
-      <H3 mb="4">Lorem ipsum dolor sit amet.</H3>
+      <H3 mb="4">Proyectos inmobiliarios</H3>
       <Box display="grid" gridGap="6" my="2">
         {items?.map((pinned, index) => {
           const translatedPinned = getTranslatedPost(pinned);
