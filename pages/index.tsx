@@ -5,6 +5,7 @@ import { HomeFlorida } from "../components/home/HomeFlorida";
 import { HomeProcess } from "../components/home/HomeProcess";
 import { HomeHow } from "../components/home/HomeHow";
 import "intersection-observer";
+import { HomeWorkflow } from "../components/home/HomeWorkflow";
 
 const IndexPage = () => {
   return (
@@ -22,8 +23,9 @@ const IndexPage = () => {
         style={{ scrollSnapType: "y mandatory" }}
       >
         <HomeLanding />
-        <HomeProcess />
+        <HomeWorkflow />
         <HomeFlorida />
+        <HomeProcess />
         {/* <HomeClients /> */}
         <HomeHow />
       </Layout>

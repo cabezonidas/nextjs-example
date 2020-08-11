@@ -7,5 +7,6 @@ export const Section = styled(Box)(() => ({
   height: "100%",
   width: "100%",
   scrollSnapAlign: "start",
-  overflow: "hidden",
+  overflowY: "auto",
+  overflowX: "hidden",
 })).withComponent("section");

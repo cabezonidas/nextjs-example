@@ -9,9 +9,10 @@ import {
 } from "@cabezonidas/shop-ui";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { Section } from "./Section";
+import Link from "next/link";
 
 const esAr = {
-  crowdFundingRealState: "Crowdfunding inmobiliario",
+  crowdFundingRealState: "Construye el futuro que quieras",
   landingPhrase: "Inversión segura en inmuebles",
   investInUsa: "Invertir en USA",
 };
@@ -67,18 +68,34 @@ export const HomeLanding = () => {
           justifyContent="space-between"
           height="100%"
           width="100%"
+          textAlign="center"
         >
           <Box>
             <Title mb="4" fontSize={[5, 6, 7]}>
               {t("index.landingPhrase")}
             </Title>
-            <SubTitle fontSize={[2, 3, 4, 5]}>
+            <SubTitle fontSize={[2, 3, 4, 5]} py={[2, 3, 4, 5]}>
               {t("index.crowdFundingRealState")}
             </SubTitle>
           </Box>
-          <ScrollButton variant="default">
-            {t("index.investInUsa")}
-          </ScrollButton>
+          <Box
+            display="grid"
+            gridTemplateColumns="repeat(2, 1fr)"
+            gridGap="2"
+            width="max-content"
+            m="auto"
+          >
+            <Link href="/posts" passHref={true}>
+              <Button variant="default" as="a">
+                Ver proyectos
+              </Button>
+            </Link>
+            <Link href="/pinned" passHref={true}>
+              <Button variant="primary" as="a">
+                Invertir ahora
+              </Button>
+            </Link>
+          </Box>
         </Box>
       </StyledSection>
     </>
@@ -100,13 +117,6 @@ const StyledSection = styled(Section)<{ url: string }>(({ url }) => ({
   },
 }));
 
-const ScrollButton = styled(Button.withComponent("a"))(({ theme }) => ({
-  width: "max-content",
-  alignSelf: "center",
-  padding: `${theme.space[4]} ${theme.space[8]}`,
-  borderRadius: theme.space[2],
-}));
-
 const Title = styled(H1)(() => ({
   textTransform: "uppercase",
   fontWeight: "bold",
@@ -118,8 +128,6 @@ const SubTitle = styled(H2)((props) => ({
   textTransform: "uppercase",
   textShadow: "0px 2px 2px rgb(103 102 102 / 37%)",
   color: props.theme.colors.primary.lightest,
-  background: props.theme.colors.primary.dark,
-  width: "min-content",
   padding: props.theme.space[3],
   fontSize: "unset",
 }));

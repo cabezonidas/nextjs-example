@@ -46,13 +46,13 @@ export const HomeProcess = () => {
   useEffect(() => {
     setScale(
       isLarge
-        ? 2
+        ? 1.4
         : isMediumLarge
-        ? 1.75
+        ? 1.3
         : isMedium
-        ? 1.5
+        ? 1.2
         : isMediumSmall
-        ? 1.25
+        ? 1.1
         : 1
     );
   }, [isMediumSmall, isMedium, isMediumLarge, isLarge]);
@@ -98,6 +98,7 @@ export const HomeProcess = () => {
         display="flex"
         flexDirection="column"
         flex="1 auto"
+        position="relative"
       >
         <Box
           as="h1"
@@ -109,10 +110,11 @@ export const HomeProcess = () => {
             textTransform: "uppercase",
           }}
           pt={[3, 6, 7]}
+          zIndex={1}
         >
           Proceso de inversión
         </Box>
-        <Box m="auto">
+        <Box m="auto" zIndex={0}>
           <Box style={{ transform: `scale(${scale})` }}>
             <Container ref={containerRef} growing={growing}>
               <Circle background={steps[currentStep].color} />
@@ -142,6 +144,7 @@ export const HomeProcess = () => {
           gridGap={[1, 2, 3]}
           mb="2"
           px={["0", "2", "4", "6"]}
+          zIndex={1}
         >
           {steps.map((step, i) => (
             <Fragment key={i}>

@@ -25,7 +25,7 @@ export const HomeHow = () => {
         flex="1 auto"
       >
         <Title
-          mb="4"
+          my="4"
           style={{
             opacity: inView ? 1 : 0,
             transform: inView ? "translateY(0px)" : "translateY(-30px)",

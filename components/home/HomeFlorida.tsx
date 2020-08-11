@@ -1,7 +1,14 @@
-import { useTranslation, Box, Paragraph, useTheme } from "@cabezonidas/shop-ui";
+import {
+  useTranslation,
+  Box,
+  Paragraph,
+  useTheme,
+  Button,
+} from "@cabezonidas/shop-ui";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { Section } from "./Section";
 import { useInView } from "react-intersection-observer";
+import Link from "next/link";
 
 const esAr = {};
 
@@ -31,7 +38,8 @@ export const HomeFlorida = () => {
         backgroundSize="cover"
         backgroundPosition="center"
         position="relative"
-        display="flex"
+        display="grid"
+        gridTemplateRows="1fr auto"
       >
         <Box
           alignSelf="center"
@@ -45,33 +53,38 @@ export const HomeFlorida = () => {
           ml="auto"
           p={[4, 5, 6, 7, 8]}
         >
-          <Box as="h1" my={[4, 5]} fontSize={[5, 6]}>
-            Inversión en Florida
+          <Box
+            as="h1"
+            my={[4, 5]}
+            fontSize={[4, 5]}
+            style={{ textOverflow: "ellipsis", overflow: "hidden" }}
+          >
+            Oportunidades en Florida
           </Box>
-          <Box>
-            <UnorderedList
-              display="flex"
-              flexDirection="column"
-              height="100%"
-              inView={inView}
-            >
-              <Paragraph
-                as="li"
-                fontSize={[1, 2]}
-                alignSelf="flex-start"
-                mb="2"
-              >
-                Clima espléndido, con playas paradisíacas, vida nocturna y
-                ambiente artístico y cultural diverso todo el año.
-              </Paragraph>
-              <Paragraph as="li" fontSize={[1, 2]} alignSelf="flex-start">
-                Con un mercado inmobiliario pujante, seguridad jurídica, baja
-                carga impositiva y grandes incentivos a inversiones extranjeras,
-                tu inversión en dólares con tendrá excelente rentabilidad.
-              </Paragraph>
-            </UnorderedList>
-          </Box>
+          <UnorderedList
+            display="flex"
+            flexDirection="column"
+            height="100%"
+            inView={inView}
+          >
+            <Paragraph as="li" fontSize={[1, 2]} alignSelf="flex-start" mb="2">
+              Clima espléndido, con playas paradisíacas, vida nocturna y
+              ambiente artístico y cultural diverso todo el año.
+            </Paragraph>
+          </UnorderedList>
         </Box>
+        <Link href="/pinned" passHref={true}>
+          <Button
+            variant="primary"
+            zIndex={1}
+            width="min-content"
+            my={[4, 5, 6, 7]}
+            mx="auto"
+            as="a"
+          >
+            Invertir ahora
+          </Button>
+        </Link>
         <Box
           zIndex={0}
           position="absolute"
@@ -95,14 +108,13 @@ export const HomeFlorida = () => {
               as="h1"
               mb="2"
               style={{ textTransform: "uppercase" }}
-              fontSize={[3, 4, 5, 6]}
+              fontSize={[2, 3, 4]}
             >
-              Renta segura
+              Retornos desde el 8% anual
             </Box>
             <Paragraph>
-              Invertimos en inmuebles de primera calidad y con alto potencial de
-              revalorización en el estado de Florida, USA. Obtenemos una renta
-              en dólares segura, rápida y sostenible.
+              Compramos propiedades en Florida, administramos los alquileres y
+              distribuimos la rentra entre los inversores
             </Paragraph>
           </Box>
         </Box>
@@ -118,14 +130,14 @@ export const HomeFlorida = () => {
               as="h1"
               mb="2"
               style={{ textTransform: "uppercase" }}
-              fontSize={[3, 4, 5, 6]}
+              fontSize={[2, 3, 4]}
             >
-              Fácil acceso
+              Simple y transparente
             </Box>
             <Paragraph>
-              Creamos un crowdfunding para facilitar el acceso para pequeños y
-              medianos inversores brindamos contratos válidos
-              internacionalmente, resguardando el capital y las rentabilidades.
+              Somos la única empresa del mercado que te asegura el 100% de tu
+              capital y de los retornos. Contratos desde 2 años y desde
+              cualquier país.
             </Paragraph>
           </Box>
         </Box>
