@@ -1,4 +1,4 @@
-import { useTranslation, H1, H2, Box, Paragraph } from "@cabezonidas/shop-ui";
+import { useTranslation, H1, Box, Paragraph } from "@cabezonidas/shop-ui";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { Section } from "./Section";
 import { useInView } from "react-intersection-observer";
