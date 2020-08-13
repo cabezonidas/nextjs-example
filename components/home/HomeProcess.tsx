@@ -10,13 +10,14 @@ import { Section } from "./Section";
 import { useInView } from "react-intersection-observer";
 import { useState, useRef, useEffect, Fragment } from "react";
 import { keyframes } from "@emotion/core";
+import { companyName } from "../../utils/config";
 
 const esAr = {
   step1: "Nuevos inversores",
   step2: "Acceden al crowdfunding inmobiliario de Renta Fija",
-  step3: "Realizan el aporte a Latam Investing Club",
-  step4: "Latam Investing Club adquiere el inmueble",
-  step5: "Latam Investing Club le brinda un contrato legal en USA",
+  step3: `Realizan el aporte a ${companyName}`,
+  step4: `${companyName} adquiere el inmueble`,
+  step5: `${companyName} le brinda un contrato legal en USA`,
   step6: "El inmueble se pone en alquiler",
   step7: "Distribución de la renta de alquileres a inversores",
 };
