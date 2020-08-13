@@ -94,11 +94,12 @@ const Layout = React.forwardRef<
                 <Box
                   style={{
                     textTransform: "uppercase",
-                    fontSize: "8.75px",
+                    fontSize: "8px",
                     marginLeft: "4px",
                     maxWidth: "50px",
                     maxHeight: "30px",
                     overflow: "hidden",
+                    fontWeight: "bold",
                   }}
                 >
                   <Box style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
