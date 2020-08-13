@@ -96,19 +96,17 @@ export const HomeProcess = () => {
         ref={ref}
         px="5"
         py="6"
-        display="flex"
-        flexDirection="column"
-        flex="1 auto"
+        display="grid"
+        gridTemplateRows="auto 1fr auto"
         position="relative"
       >
         <Box
           as="h1"
-          fontSize={[3, 4, 5, 6]}
+          fontSize={[4, 5, 6]}
           style={{
             opacity: inView ? 1 : 0,
             transform: inView ? "translateY(0px)" : "translateY(-30px)",
             transition: "transform 1s, opacity 1s",
-            textTransform: "uppercase",
           }}
           pt={[3, 6, 7]}
           zIndex={1}
@@ -141,8 +139,9 @@ export const HomeProcess = () => {
         <Box
           display="grid"
           gridTemplateColumns="20px 1fr"
-          gridTemplateRows={`repeat(auto-fit, minmax(20px, auto))`}
-          gridGap={[1, 2, 3]}
+          gridTemplateRows={`repeat(auto-fit, minmax(20px, 1fr))`}
+          gridRowGap={[2, 3]}
+          gridColumnGap={[1, 2, 3]}
           mb="2"
           px={["0", "2", "4", "6"]}
           zIndex={1}
@@ -160,7 +159,7 @@ export const HomeProcess = () => {
               <StepText
                 fontSize={[0, 1, 2, 3]}
                 px="1"
-                fontWeight={i === currentStep ? "bold" : undefined}
+                fontStyle={i === currentStep ? "italic" : undefined}
               >
                 {step.text}
               </StepText>
@@ -203,12 +202,15 @@ const Container = styled(Box)<{ growing: boolean }>(({ growing }) => ({
   alignItems: "center",
   justifyContent: "center",
 
-  height: "250px",
-  width: "250px",
   position: "relative",
   transform: "scale(0.5)",
   animation: `${growing ? grow : shrink} 1s ease forwards`,
 }));
+
+Container.defaultProps = {
+  height: ["200px", "250px"],
+  width: ["200px", "250px"],
+};
 
 const Steps = styled(Box)(({ theme: { fontSizes } }) => ({
   fontSize: fontSizes[6],
@@ -245,13 +247,17 @@ const Text = styled(Paragraph)(({ theme: { space } }) => ({
 }));
 const PointerContainer = styled(Box)(() => ({
   position: "absolute",
-  top: "-25px",
-  left: "115px",
-  width: "20px",
-  height: "150px",
   animation: `${rotate} 17.5s linear forwards infinite`,
   transformOrigin: "bottom center",
 }));
+
+PointerContainer.defaultProps = {
+  top: ["-50px", "-25px"],
+  left: ["90px", "115px"],
+  width: ["20px", "20px"],
+  height: ["150px", "150px"],
+};
+
 const Pointer = styled(Span)(() => ({
   borderRadius: "50%",
   height: "20px",
