@@ -22,7 +22,7 @@ const enUs = {
     "Ser un empresa global, responsable maximizando el rendimiento para los inversores y aportando para un mundo mejor.",
   values: "Valores",
   valuesBody:
-    "Excelencia, Honestidad, Transparencia, responsabilidad y pasión.",
+    "Excelencia, honestidad, transparencia, responsabilidad y pasión.",
   team: "Our team",
 };
 const esAr = {
@@ -35,7 +35,7 @@ const esAr = {
     "Ser un empresa global, responsable maximizando el rendimiento para los inversores y aportando para un mundo mejor.",
   values: "Valores",
   valuesBody:
-    "Excelencia, Honestidad, Transparencia, responsabilidad y pasión.",
+    "Excelencia, honestidad, transparencia, responsabilidad y pasión.",
   team: "Nuestro equipo",
 };
 
