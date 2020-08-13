@@ -85,7 +85,34 @@ const Layout = React.forwardRef<
         header={
           <Box display="grid" gridTemplateColumns="1fr auto">
             <Link href="/" passHref={true}>
-              <InvestingClubLatam style={{ cursor: "pointer" }} />
+              <Box
+                display="flex"
+                alignItems="center"
+                style={{ cursor: "pointer", userSelect: "none" }}
+              >
+                <InvestingClubLatam />
+                <Box
+                  style={{
+                    textTransform: "uppercase",
+                    fontSize: "8px",
+                    marginLeft: "4px",
+                    maxWidth: "50px",
+                    maxHeight: "30px",
+                    overflow: "hidden",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <Box style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
+                    Latam
+                  </Box>
+                  <Box style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
+                    Investing
+                  </Box>
+                  <Box style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
+                    Club
+                  </Box>
+                </Box>
+              </Box>
             </Link>
             <Box alignSelf="center">
               <Link href="/pinned" passHref={true}>

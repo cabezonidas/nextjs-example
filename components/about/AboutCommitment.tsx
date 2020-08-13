@@ -2,6 +2,7 @@ import { useTranslation, H1, Box } from "@cabezonidas/shop-ui";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { useInView } from "react-intersection-observer";
 import { useState, useEffect } from "react";
+import { companyName } from "../../utils/config";
 
 const esAr = {};
 
@@ -46,8 +47,7 @@ export const AboutCommitment = () => {
           inView={inViewOnce}
         >
           <ListItem>
-            Latam Investing Club selecciona unidades premium y con mayor
-            potencial de crecimiento y oportunidad de negocio.
+            {`${companyName} selecciona unidades premium y con mayor potencial de crecimiento y oportunidad de negocio.`}
           </ListItem>
           <ListItem>
             Creamos un crowdfunding para facilitar el acceso a inversiones

@@ -24,20 +24,21 @@ export const HomeHow = () => {
         flexDirection="column"
         flex="1 auto"
       >
-        <Title
-          my="4"
+        <Box
+          as="h1"
+          fontSize={[4, 5, 6]}
+          my={[6, 7, 8]}
           style={{
             opacity: inView ? 1 : 0,
             transform: inView ? "translateY(0px)" : "translateY(-30px)",
             transition: "transform 1s, opacity 1s",
           }}
-          fontSize={[5, 6, 7]}
         >
           ¿Cómo comenzar a invertir?
-        </Title>
+        </Box>
         <SubTitle
           my={[1, 2, 4, 6, 8]}
-          fontSize={[2, 3, 4]}
+          fontSize={[1, 2]}
           maxWidth="80%"
           m="auto"
         >
@@ -121,5 +122,4 @@ Card.defaultProps = {
   minHeight: ["auto", "auto", "500px"],
 };
 
-const Title = styled(H1)(() => ({}));
 const SubTitle = styled(H2)(() => ({ fontSize: "unset" }));

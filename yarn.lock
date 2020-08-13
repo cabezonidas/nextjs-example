@@ -1303,10 +1303,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cabezonidas/shop-ui@^1.0.49":
-  version "1.0.49"
-  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-1.0.49.tgz#dfa32571d0cb2c66d7231b2dfc19d3f7b6e277ce"
-  integrity sha512-rXglD7RP+Rij955X0ehlI8nmCMDcMWJo3R73YxitPco/AhSiBzTdi/UsvAP9H+GwYn7aqPgFctrCk6AQwM2rTA==
+"@cabezonidas/shop-ui@^1.0.51":
+  version "1.0.51"
+  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-1.0.51.tgz#6db7647a2f4bf585851a214bdbe8ee583358dad9"
+  integrity sha512-zTApykz/LDYadaOiLj1JNuqRCWO6PtctnJUXmSb/wzSuyqXJJc9zB1lJEAQiDlGbmrHNF6D4YvnTw1SW4GM81A==
   dependencies:
     "@emotion/core" "^10.0.27"
     "@emotion/is-prop-valid" "^0.8.6"
