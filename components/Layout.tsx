@@ -78,8 +78,6 @@ const Layout = React.forwardRef<
         <meta property="og:locale" content="es_AR" />
         <meta property="og:locale:alternate" content="en_US" />
         <meta property="og:site_name" content={companyName} />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/ScrollTrigger.min.js"></script>
       </Head>
       <ResponsiveLayout
         header={
