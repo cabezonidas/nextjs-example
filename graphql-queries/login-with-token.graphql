@@ -1,0 +1,9 @@
+mutation LoginWithToken($email: String!, $token: String!) {
+  loginWithToken(email: $email, token: $token) {
+    accessToken
+    needsPassword
+    user {
+      ...User
+    }
+  }
+}
