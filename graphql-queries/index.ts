@@ -21,6 +21,7 @@ export type Query = {
   me?: Maybe<User>;
   roles: Array<Role>;
   getStaff: Array<User>;
+  loginRequiresCode: Scalars['Boolean'];
   allPosts: Array<Post>;
   allPostDrafts: Array<Post>;
   getDraft?: Maybe<Post>;
@@ -34,6 +35,11 @@ export type Query = {
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
   allTags: Array<Tag>;
+};
+
+
+export type QueryLoginRequiresCodeArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -77,7 +83,7 @@ export type User = {
   _id: Scalars['String'];
   email: Scalars['String'];
   roles?: Maybe<Array<Scalars['String']>>;
-  dob?: Maybe<Scalars['Int']>;
+  dob?: Maybe<Scalars['Float']>;
   name?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   linkedin?: Maybe<Scalars['String']>;
@@ -166,10 +172,12 @@ export type Tag = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: LoginResponse;
+  loginWithToken: LoginResponse;
   logout: Scalars['Boolean'];
   revokeRefreshTokenForUser: Scalars['Boolean'];
   register: LoginResponse;
   updateProfile: User;
+  renewCodeLogin: Scalars['Boolean'];
   createDraft: Post;
   deletePost: Scalars['Boolean'];
   saveDraft: Post;
@@ -198,6 +206,12 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationLoginWithTokenArgs = {
+  token: Scalars['String'];
+  email: Scalars['String'];
+};
+
+
 export type MutationRevokeRefreshTokenForUserArgs = {
   userId: Scalars['String'];
 };
@@ -211,6 +225,11 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateProfileArgs = {
   input: EditProfileInput;
+};
+
+
+export type MutationRenewCodeLoginArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -334,6 +353,7 @@ export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
   user: User;
+  needsPassword?: Maybe<Scalars['Boolean']>;
 };
 
 export type EditProfileInput = {
@@ -438,6 +458,52 @@ export type GetStaffQuery = (
   )> }
 );
 
+export type LoginRequiresCodeQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type LoginRequiresCodeQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'loginRequiresCode'>
+);
+
+export type LoginWithTokenMutationVariables = Exact<{
+  email: Scalars['String'];
+  token: Scalars['String'];
+}>;
+
+
+export type LoginWithTokenMutation = (
+  { __typename?: 'Mutation' }
+  & { loginWithToken: (
+    { __typename?: 'LoginResponse' }
+    & Pick<LoginResponse, 'accessToken' | 'needsPassword'>
+    & { user: (
+      { __typename?: 'User' }
+      & UserFragment
+    ) }
+  ) }
+);
+
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'LoginResponse' }
+    & Pick<LoginResponse, 'accessToken' | 'needsPassword'>
+    & { user: (
+      { __typename?: 'User' }
+      & UserFragment
+    ) }
+  ) }
+);
+
 export type PostFragment = (
   { __typename?: 'Post' }
   & Pick<Post, '_id' | 'starred' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
@@ -452,6 +518,16 @@ export type PostFragment = (
       & UserFragment
     )> }
   )> }
+);
+
+export type RenewCodeLoginMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type RenewCodeLoginMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'renewCodeLogin'>
 );
 
 export type UserFragment = (
@@ -717,3 +793,138 @@ export function useGetStaffLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type GetStaffQueryHookResult = ReturnType<typeof useGetStaffQuery>;
 export type GetStaffLazyQueryHookResult = ReturnType<typeof useGetStaffLazyQuery>;
 export type GetStaffQueryResult = ApolloReactCommon.QueryResult<GetStaffQuery, GetStaffQueryVariables>;
+export const LoginRequiresCodeDocument = gql`
+    query LoginRequiresCode($email: String!) {
+  loginRequiresCode(email: $email)
+}
+    `;
+
+/**
+ * __useLoginRequiresCodeQuery__
+ *
+ * To run a query within a React component, call `useLoginRequiresCodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLoginRequiresCodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLoginRequiresCodeQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useLoginRequiresCodeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<LoginRequiresCodeQuery, LoginRequiresCodeQueryVariables>) {
+        return ApolloReactHooks.useQuery<LoginRequiresCodeQuery, LoginRequiresCodeQueryVariables>(LoginRequiresCodeDocument, baseOptions);
+      }
+export function useLoginRequiresCodeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<LoginRequiresCodeQuery, LoginRequiresCodeQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<LoginRequiresCodeQuery, LoginRequiresCodeQueryVariables>(LoginRequiresCodeDocument, baseOptions);
+        }
+export type LoginRequiresCodeQueryHookResult = ReturnType<typeof useLoginRequiresCodeQuery>;
+export type LoginRequiresCodeLazyQueryHookResult = ReturnType<typeof useLoginRequiresCodeLazyQuery>;
+export type LoginRequiresCodeQueryResult = ApolloReactCommon.QueryResult<LoginRequiresCodeQuery, LoginRequiresCodeQueryVariables>;
+export const LoginWithTokenDocument = gql`
+    mutation LoginWithToken($email: String!, $token: String!) {
+  loginWithToken(email: $email, token: $token) {
+    accessToken
+    needsPassword
+    user {
+      ...User
+    }
+  }
+}
+    ${UserFragmentDoc}`;
+export type LoginWithTokenMutationFn = ApolloReactCommon.MutationFunction<LoginWithTokenMutation, LoginWithTokenMutationVariables>;
+
+/**
+ * __useLoginWithTokenMutation__
+ *
+ * To run a mutation, you first call `useLoginWithTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginWithTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginWithTokenMutation, { data, loading, error }] = useLoginWithTokenMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useLoginWithTokenMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginWithTokenMutation, LoginWithTokenMutationVariables>) {
+        return ApolloReactHooks.useMutation<LoginWithTokenMutation, LoginWithTokenMutationVariables>(LoginWithTokenDocument, baseOptions);
+      }
+export type LoginWithTokenMutationHookResult = ReturnType<typeof useLoginWithTokenMutation>;
+export type LoginWithTokenMutationResult = ApolloReactCommon.MutationResult<LoginWithTokenMutation>;
+export type LoginWithTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginWithTokenMutation, LoginWithTokenMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    accessToken
+    needsPassword
+    user {
+      ...User
+    }
+  }
+}
+    ${UserFragmentDoc}`;
+export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
+export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const RenewCodeLoginDocument = gql`
+    mutation renewCodeLogin($email: String!) {
+  renewCodeLogin(email: $email)
+}
+    `;
+export type RenewCodeLoginMutationFn = ApolloReactCommon.MutationFunction<RenewCodeLoginMutation, RenewCodeLoginMutationVariables>;
+
+/**
+ * __useRenewCodeLoginMutation__
+ *
+ * To run a mutation, you first call `useRenewCodeLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRenewCodeLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [renewCodeLoginMutation, { data, loading, error }] = useRenewCodeLoginMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useRenewCodeLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RenewCodeLoginMutation, RenewCodeLoginMutationVariables>) {
+        return ApolloReactHooks.useMutation<RenewCodeLoginMutation, RenewCodeLoginMutationVariables>(RenewCodeLoginDocument, baseOptions);
+      }
+export type RenewCodeLoginMutationHookResult = ReturnType<typeof useRenewCodeLoginMutation>;
+export type RenewCodeLoginMutationResult = ApolloReactCommon.MutationResult<RenewCodeLoginMutation>;
+export type RenewCodeLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<RenewCodeLoginMutation, RenewCodeLoginMutationVariables>;

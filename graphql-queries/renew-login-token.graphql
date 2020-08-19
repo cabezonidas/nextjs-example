@@ -1,0 +1,3 @@
+mutation renewCodeLogin($email: String!) {
+  renewCodeLogin(email: $email)
+}
