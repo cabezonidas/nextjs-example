@@ -7,10 +7,13 @@ import "@reach/combobox/styles.css";
 import "highlight.js/styles/default.css";
 import "@cabezonidas/shop-ui/assets/style.css";
 import "./../styles.css";
-import { useApollo } from "../lib/apolloClient";
+import { withApollo } from "../lib/apolloClient";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const apolloClient = useApollo(pageProps.initialApolloState);
+function MyApp({
+  Component,
+  pageProps,
+  apolloClient,
+}: AppProps & { apolloClient: any }) {
   return (
     <ApolloProvider client={apolloClient}>
       <UiProvider suspense={false}>
@@ -20,4 +23,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default withApollo(MyApp);
