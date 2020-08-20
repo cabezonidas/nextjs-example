@@ -1,183 +1,77 @@
 import React from "react";
 import Layout from "../components/Layout";
 import {
-  useLoginRequiresCodeLazyQuery,
-  useLoginWithTokenMutation,
-  useLoginMutation,
-  useRenewCodeLoginMutation,
+  useMeQuery,
+  useLogoutMutation,
+  MeQuery,
+  MeDocument,
 } from "../graphql-queries";
-import {
-  useTranslation,
-  H1,
-  Form,
-  Label,
-  Input,
-  Box,
-  Button,
-  Alert,
-  Loading,
-} from "@cabezonidas/shop-ui";
+import { useTranslation, H1, Dialog, Box, Button } from "@cabezonidas/shop-ui";
+import { Authenticate } from "../components/profile/Authenticate";
+import { setAccessToken } from "../lib/accessToken";
+import { useRouter } from "next/router";
 
 const enUs = {
   title: "Profile",
+  modalTitle: "Start by logging in",
+  modalFooter: "If you don't have an account, it will create one for you",
+  logOut: "Log out",
 };
 const esAr = {
   title: "Perfil",
+  modalTitle: "Inicia sesión",
+  modalFooter: "Si no posees una cuenta, se creará una ahora",
+  logOut: "Salir",
 };
-
-const emailRegex = new RegExp(
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-);
 
 const ProfilePage = () => {
   const { t, i18n } = useTranslation();
   i18n.addResourceBundle("en-US", "translation", { profile: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { profile: esAr }, true, true);
 
-  const [email, setEmail] = React.useState("");
-  const validEmail = emailRegex.test(email);
-  const [
-    checkMail,
-    { data: mailData, loading: checkingMail },
-  ] = useLoginRequiresCodeLazyQuery();
+  const router = useRouter();
 
-  const [code, setCode] = React.useState("");
-  const [
-    loginWithToken,
-    { data: tokenData, loading: checkingToken, error: tokenError },
-  ] = useLoginWithTokenMutation();
+  const { data, loading } = useMeQuery();
 
-  const [password, setPassword] = React.useState("");
-  const [
-    login,
-    { data: loginData, loading: loggingIn, error: loginError },
-  ] = useLoginMutation();
+  const [logout, { loading: loggingOut }] = useLogoutMutation();
 
-  const [
-    renewCode,
-    { loading: renewingCode, data: renewData },
-  ] = useRenewCodeLoginMutation();
-
-  const loggedIn = tokenData?.loginWithToken ?? loginData?.login;
   return (
     <Layout documentTitle={t("profile.title")}>
       <H1 mb="4">{t("profile.title")}</H1>
-      {loggedIn ? (
-        <Box>Hola {loggedIn.user.name ?? loggedIn.user.email}</Box>
-      ) : !mailData ? (
-        <Form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (validEmail) {
-              checkMail({ variables: { email } });
-            }
-          }}
-        >
-          <Box>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              value={email}
-              type="username"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {!validEmail && email && (
-              <Alert variant="danger">Email inválido</Alert>
-            )}
-            {!email && <Alert variant="info">Ingresa tu email</Alert>}
-          </Box>
+
+      <Dialog
+        aria-label={t("profile.modalTitle")}
+        isOpen={!loading && data && !data.me}
+        // onDismiss={() => router.push("/")}
+        header={t("profile.modalTitle")}
+        footer={t("profile.modalFooter")}
+      >
+        <Authenticate />
+      </Dialog>
+      {data?.me && (
+        <Box>
+          <Box>{data.me.email}</Box>
           <Button
-            justifySelf="flex-end"
-            type="submit"
-            variant="primary"
-            disabled={!validEmail || checkingMail}
+            mt="4"
+            disabled={loggingOut}
+            onClick={async () => {
+              await logout({
+                update: (store, { data }) => {
+                  if (data) {
+                    store.writeQuery<MeQuery>({
+                      query: MeDocument,
+                      data: { me: null },
+                    });
+                  }
+                },
+              });
+              router.push("/");
+              setAccessToken("");
+            }}
           >
-            {checkingMail ? <Loading /> : "Continuar"}
+            {t("profile.logOut")}
           </Button>
-        </Form>
-      ) : mailData.loginRequiresCode || renewData?.renewCodeLogin ? (
-        <Form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (code) {
-              loginWithToken({ variables: { email, token: code } });
-            }
-          }}
-        >
-          <Box>
-            <Label htmlFor="token">Code</Label>
-            <Input
-              id="token"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-            <Alert variant="info">
-              Copia y pega el código que enviamos a tu email
-            </Alert>
-            {tokenError && (
-              <Alert variant="danger">
-                {tokenError.graphQLErrors.map((e, i) => (
-                  <Box key={i}>{e.message}</Box>
-                ))}
-              </Alert>
-            )}
-          </Box>
-          <Button
-            justifySelf="flex-end"
-            type="submit"
-            variant="primary"
-            disabled={!code || checkingToken}
-          >
-            {checkingToken ? <Loading /> : "Continuar"}
-          </Button>
-        </Form>
-      ) : (
-        <Form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (password) {
-              login({ variables: { email, password } });
-            }
-          }}
-        >
-          <Box>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={email} />
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              autoComplete="off"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {!password && <Alert variant="info">Ingresa tu password</Alert>}
-            {loginError && (
-              <Alert variant="danger">
-                {loginError.graphQLErrors.map((e, i) => (
-                  <Box key={i}>{e.message}</Box>
-                ))}
-              </Alert>
-            )}
-          </Box>
-          <Box display="grid" gridGap="2" gridTemplateColumns="1fr auto">
-            <Button
-              justifySelf="flex-end"
-              disabled={renewingCode || loggingIn}
-              variant="default"
-              onClick={() => renewCode({ variables: { email } })}
-            >
-              No sé mi contraseña
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={!password || loggingIn}
-            >
-              {loggingIn ? <Loading /> : "Continuar"}
-            </Button>
-          </Box>
-        </Form>
+        </Box>
       )}
     </Layout>
   );
