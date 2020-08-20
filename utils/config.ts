@@ -16,4 +16,5 @@ const baseDomain = (() => {
 })();
 export const websiteUrl = baseDomain.website;
 export const graphqlUrl = `${baseDomain.api}/graphql`;
+export const refreshTokenlUrl = `${baseDomain.api}/refresh_token`;
 export const companyName = "Latam Investing Club";
