@@ -30,7 +30,7 @@ const IndexPage = ({
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
 
-  const [latest, ...rest] = items.posts;
+  const [latest, ...rest] = items?.posts ?? [];
   const [oldPostsTotal, setOldPostsTotal] = useState(
     Math.max(items.total - 1, 0)
   );
@@ -93,6 +93,12 @@ const IndexPage = ({
               })}
             </Box>
           </>
+        )}
+
+        {!!olderPosts.length && !translatedLatest && (
+          <Box textAlign="center" my="6">
+            Parece que aún no hay entradas. Regresa más tarde 😊
+          </Box>
         )}
       </Box>
     </Layout>

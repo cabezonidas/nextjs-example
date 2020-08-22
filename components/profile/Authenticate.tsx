@@ -16,13 +16,15 @@ import {
   Button,
   Alert,
   Loading,
+  useToast,
 } from "@cabezonidas/shop-ui";
+import { setAccessToken } from "../../lib/accessToken";
 
 const enUs = {};
 const esAr = {};
 
 const emailRegex = new RegExp(
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 );
 
 export const Authenticate = forwardRef<
@@ -66,6 +68,8 @@ export const Authenticate = forwardRef<
     { loading: renewingCode, data: renewData },
   ] = useRenewCodeLoginMutation();
 
+  const { notify } = useToast();
+
   return (
     <>
       {!mailData ? (
@@ -85,7 +89,7 @@ export const Authenticate = forwardRef<
               id="email"
               value={email}
               type="username"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim())}
             />
             {!validEmail && email && (
               <Alert variant="danger">Email inválido</Alert>
@@ -111,6 +115,9 @@ export const Authenticate = forwardRef<
               loginWithToken({
                 variables: { email, token: code },
                 update: (store, { data }) => {
+                  notify("Muy bien! Ya haz validado tu email 🎉", {
+                    variant: "success",
+                  });
                   if (data) {
                     store.writeQuery<MeQuery>({
                       query: MeDocument,
@@ -118,6 +125,7 @@ export const Authenticate = forwardRef<
                         me: data.loginWithToken.user,
                       },
                     });
+                    setAccessToken(data.loginWithToken.accessToken);
                   }
                 },
               });
@@ -168,6 +176,7 @@ export const Authenticate = forwardRef<
                         me: data.login.user,
                       },
                     });
+                    setAccessToken(data.login.accessToken);
                   }
                 },
               });

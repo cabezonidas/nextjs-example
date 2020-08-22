@@ -1,0 +1,5 @@
+mutation SetUpInvestorProfile($input: SetUpInvestorProfileInput!) {
+  setUpInvestorProfile(input: $input) {
+    ...User
+  }
+}

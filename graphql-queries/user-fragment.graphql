@@ -11,9 +11,20 @@ fragment User on User {
   messenger
   github
   twitter
+  phone
   description {
     localeId
     text
   }
   roles
+  sponsoredBy {
+    _id
+    email
+    name
+  }
+  myInvestors {
+    _id
+    email
+    name
+  }
 }

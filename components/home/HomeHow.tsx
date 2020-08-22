@@ -1,7 +1,14 @@
-import { useTranslation, H2, Box, Paragraph } from "@cabezonidas/shop-ui";
+import {
+  useTranslation,
+  H2,
+  Box,
+  Paragraph,
+  Button,
+} from "@cabezonidas/shop-ui";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { Section } from "./Section";
 import { useInView } from "react-intersection-observer";
+import Link from "next/link";
 
 const esAr = {};
 
@@ -16,14 +23,7 @@ export const HomeHow = () => {
 
   return (
     <>
-      <StyledSection
-        ref={ref}
-        px="5"
-        py={[2, 3, 4, 8]}
-        display="flex"
-        flexDirection="column"
-        flex="1 auto"
-      >
+      <StyledSection ref={ref} px="5" py={[2, 3, 4, 8]}>
         <Box
           as="h1"
           fontSize={[4, 5, 6]}
@@ -54,6 +54,8 @@ export const HomeHow = () => {
             <Paragraph>
               Se registra en nuestra plataforma web rápido y seguro.
             </Paragraph>
+          </Card>
+          <Card>
             <Paragraph>Elige el plan de Inversion.</Paragraph>
           </Card>
           <Card>
@@ -70,6 +72,11 @@ export const HomeHow = () => {
             </Paragraph>
           </Card>
         </UnorderedList>
+        <Link href="/profile" passHref={true}>
+          <Button variant="primary" mt="2" as="a">
+            Regístrate ahora
+          </Button>
+        </Link>
       </StyledSection>
     </>
   );
@@ -87,7 +94,7 @@ const UnorderedList = styled(Box.withComponent("ul"))<{ inView?: boolean }>(
   ({ inView }) => ({
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-    margin: "auto",
+    margin: "20px auto",
     li: {
       opacity: inView === false ? 0 : 1,
       transform: inView === false ? "translateX(10%)" : "translateX(0%)",
@@ -119,7 +126,7 @@ const Card = styled(Box.withComponent("li"))(
 
 Card.defaultProps = {
   p: [3, 4, 5, 6],
-  minHeight: ["auto", "auto", "500px"],
+  minHeight: ["auto", "auto", "auto"],
 };
 
 const SubTitle = styled(H2)(() => ({ fontSize: "unset" }));

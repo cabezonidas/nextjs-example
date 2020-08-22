@@ -17,10 +17,11 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   users: Array<User>;
-  hello: Scalars['String'];
+  findUser: User;
   me?: Maybe<User>;
   roles: Array<Role>;
   getStaff: Array<User>;
+  getNetworkers: Array<User>;
   loginRequiresCode: Scalars['Boolean'];
   allPosts: Array<Post>;
   allPostDrafts: Array<Post>;
@@ -35,6 +36,11 @@ export type Query = {
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
   allTags: Array<Tag>;
+};
+
+
+export type QueryFindUserArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -94,12 +100,23 @@ export type User = {
   github?: Maybe<Scalars['String']>;
   twitter?: Maybe<Scalars['String']>;
   description?: Maybe<Array<UserDescription>>;
+  myInvestors?: Maybe<Array<UserRelation>>;
+  sponsoredBy?: Maybe<UserRelation>;
+  country?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
 };
 
 export type UserDescription = {
   __typename?: 'UserDescription';
   localeId: Scalars['String'];
   text: Scalars['String'];
+};
+
+export type UserRelation = {
+  __typename?: 'UserRelation';
+  _id: Scalars['String'];
+  name: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type Role = {
@@ -177,6 +194,9 @@ export type Mutation = {
   revokeRefreshTokenForUser: Scalars['Boolean'];
   register: LoginResponse;
   updateProfile: User;
+  setUpInvestorProfile: User;
+  setUserRole: User;
+  createUser: User;
   renewCodeLogin: Scalars['Boolean'];
   createDraft: Post;
   deletePost: Scalars['Boolean'];
@@ -225,6 +245,23 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateProfileArgs = {
   input: EditProfileInput;
+};
+
+
+export type MutationSetUpInvestorProfileArgs = {
+  input: SetUpInvestorProfileInput;
+};
+
+
+export type MutationSetUserRoleArgs = {
+  add: Scalars['Boolean'];
+  roleId: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationCreateUserArgs = {
+  input: CreateUserInput;
 };
 
 
@@ -376,6 +413,26 @@ export type LocalizedDescription = {
   text: Scalars['String'];
 };
 
+export type SetUpInvestorProfileInput = {
+  name: Scalars['String'];
+  country: Scalars['String'];
+  phone: Scalars['String'];
+  password: Scalars['String'];
+  sponsor?: Maybe<UserRelationInput>;
+};
+
+export type UserRelationInput = {
+  _id: Scalars['String'];
+  name: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type CreateUserInput = {
+  name: Scalars['String'];
+  email: Scalars['String'];
+  roles: Array<Scalars['String']>;
+};
+
 
 export type GetLatestPublicPostsQueryVariables = Exact<{
   skip: Scalars['Float'];
@@ -393,6 +450,17 @@ export type GetLatestPublicPostsQuery = (
       & PostFragment
     )> }
   ) }
+);
+
+export type GetNetworkersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNetworkersQuery = (
+  { __typename?: 'Query' }
+  & { getNetworkers: Array<(
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'name' | 'email'>
+  )> }
 );
 
 export type GetPinnedPublicPathsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -549,12 +617,31 @@ export type RenewCodeLoginMutation = (
   & Pick<Mutation, 'renewCodeLogin'>
 );
 
+export type SetUpInvestorProfileMutationVariables = Exact<{
+  input: SetUpInvestorProfileInput;
+}>;
+
+
+export type SetUpInvestorProfileMutation = (
+  { __typename?: 'Mutation' }
+  & { setUpInvestorProfile: (
+    { __typename?: 'User' }
+    & UserFragment
+  ) }
+);
+
 export type UserFragment = (
   { __typename?: 'User' }
-  & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'twitter' | 'roles'>
+  & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'twitter' | 'phone' | 'roles'>
   & { description?: Maybe<Array<(
     { __typename?: 'UserDescription' }
     & Pick<UserDescription, 'localeId' | 'text'>
+  )>>, sponsoredBy?: Maybe<(
+    { __typename?: 'UserRelation' }
+    & Pick<UserRelation, '_id' | 'email' | 'name'>
+  )>, myInvestors?: Maybe<Array<(
+    { __typename?: 'UserRelation' }
+    & Pick<UserRelation, '_id' | 'email' | 'name'>
   )>> }
 );
 
@@ -572,11 +659,22 @@ export const UserFragmentDoc = gql`
   messenger
   github
   twitter
+  phone
   description {
     localeId
     text
   }
   roles
+  sponsoredBy {
+    _id
+    email
+    name
+  }
+  myInvestors {
+    _id
+    email
+    name
+  }
 }
     `;
 export const PostFragmentDoc = gql`
@@ -646,6 +744,40 @@ export function useGetLatestPublicPostsLazyQuery(baseOptions?: ApolloReactHooks.
 export type GetLatestPublicPostsQueryHookResult = ReturnType<typeof useGetLatestPublicPostsQuery>;
 export type GetLatestPublicPostsLazyQueryHookResult = ReturnType<typeof useGetLatestPublicPostsLazyQuery>;
 export type GetLatestPublicPostsQueryResult = ApolloReactCommon.QueryResult<GetLatestPublicPostsQuery, GetLatestPublicPostsQueryVariables>;
+export const GetNetworkersDocument = gql`
+    query GetNetworkers {
+  getNetworkers {
+    _id
+    name
+    email
+  }
+}
+    `;
+
+/**
+ * __useGetNetworkersQuery__
+ *
+ * To run a query within a React component, call `useGetNetworkersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNetworkersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNetworkersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetNetworkersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetNetworkersQuery, GetNetworkersQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetNetworkersQuery, GetNetworkersQueryVariables>(GetNetworkersDocument, baseOptions);
+      }
+export function useGetNetworkersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetNetworkersQuery, GetNetworkersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetNetworkersQuery, GetNetworkersQueryVariables>(GetNetworkersDocument, baseOptions);
+        }
+export type GetNetworkersQueryHookResult = ReturnType<typeof useGetNetworkersQuery>;
+export type GetNetworkersLazyQueryHookResult = ReturnType<typeof useGetNetworkersLazyQuery>;
+export type GetNetworkersQueryResult = ApolloReactCommon.QueryResult<GetNetworkersQuery, GetNetworkersQueryVariables>;
 export const GetPinnedPublicPathsDocument = gql`
     query GetPinnedPublicPaths {
   getPinnedPublicPaths {
@@ -1008,3 +1140,35 @@ export function useRenewCodeLoginMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type RenewCodeLoginMutationHookResult = ReturnType<typeof useRenewCodeLoginMutation>;
 export type RenewCodeLoginMutationResult = ApolloReactCommon.MutationResult<RenewCodeLoginMutation>;
 export type RenewCodeLoginMutationOptions = ApolloReactCommon.BaseMutationOptions<RenewCodeLoginMutation, RenewCodeLoginMutationVariables>;
+export const SetUpInvestorProfileDocument = gql`
+    mutation SetUpInvestorProfile($input: SetUpInvestorProfileInput!) {
+  setUpInvestorProfile(input: $input) {
+    ...User
+  }
+}
+    ${UserFragmentDoc}`;
+export type SetUpInvestorProfileMutationFn = ApolloReactCommon.MutationFunction<SetUpInvestorProfileMutation, SetUpInvestorProfileMutationVariables>;
+
+/**
+ * __useSetUpInvestorProfileMutation__
+ *
+ * To run a mutation, you first call `useSetUpInvestorProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetUpInvestorProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setUpInvestorProfileMutation, { data, loading, error }] = useSetUpInvestorProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSetUpInvestorProfileMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetUpInvestorProfileMutation, SetUpInvestorProfileMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetUpInvestorProfileMutation, SetUpInvestorProfileMutationVariables>(SetUpInvestorProfileDocument, baseOptions);
+      }
+export type SetUpInvestorProfileMutationHookResult = ReturnType<typeof useSetUpInvestorProfileMutation>;
+export type SetUpInvestorProfileMutationResult = ApolloReactCommon.MutationResult<SetUpInvestorProfileMutation>;
+export type SetUpInvestorProfileMutationOptions = ApolloReactCommon.BaseMutationOptions<SetUpInvestorProfileMutation, SetUpInvestorProfileMutationVariables>;
