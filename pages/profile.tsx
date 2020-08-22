@@ -10,6 +10,7 @@ import { useTranslation, H1, Dialog, Box, Button } from "@cabezonidas/shop-ui";
 import { Authenticate } from "../components/profile/Authenticate";
 import { setAccessToken } from "../lib/accessToken";
 import { useRouter } from "next/router";
+import AboutYou from "../components/profile/AboutYou";
 
 const enUs = {
   title: "Profile",
@@ -31,7 +32,7 @@ const ProfilePage = () => {
 
   const { data, loading } = useMeQuery();
 
-  const [logout, { loading: loggingOut }] = useLogoutMutation();
+  const [logout, { loading: loggingOut, client }] = useLogoutMutation();
 
   return (
     <Layout documentTitle={t("profile.title")}>
@@ -45,29 +46,37 @@ const ProfilePage = () => {
         <Authenticate />
       </Dialog>
       {data?.me && (
-        <Box>
-          <Box>{data.me.email}</Box>
-          <Button
-            mt="4"
-            disabled={loggingOut}
-            onClick={async () => {
-              await logout({
-                update: (store, { data }) => {
-                  if (data) {
-                    store.writeQuery<MeQuery>({
-                      query: MeDocument,
-                      data: { me: null },
-                    });
-                  }
-                },
-              });
-              router.push("/");
-              setAccessToken("");
-            }}
-          >
-            {t("profile.logOut")}
-          </Button>
-        </Box>
+        <>
+          {!data.me.name ? (
+            <>
+              <Box>Solo queda que nos confirmes la siguiente información: </Box>
+              <AboutYou user={data.me} />
+            </>
+          ) : (
+            <Box>
+              <Box>
+                Muchas gracias {data.me.name} por haberte registrado con
+                nosotros. A la brevedad estaremos en contactor contigo.
+              </Box>
+            </Box>
+          )}
+          <Box width="100%" justifyContent="space-around" display="flex">
+            <Button
+              mt="4"
+              disabled={loggingOut}
+              onClick={async () => {
+                await logout();
+                if (client) {
+                  await client.clearStore();
+                }
+                router.push("/");
+                setAccessToken("");
+              }}
+            >
+              {t("profile.logOut")}
+            </Button>
+          </Box>
+        </>
       )}
     </Layout>
   );
