@@ -32,6 +32,7 @@ const enUsRoutes = {
     about: "Us",
     pinned: "Investements",
     profile: "Profile",
+    blog: "Blog",
   },
   footer: "I'm here to stay!",
 };
@@ -41,6 +42,8 @@ const esArRoutes = {
     about: "Nosotros",
     pinned: "Inversiones",
     perfil: "Perfil",
+    profile: "Profile",
+    blog: "Blog",
   },
   footer: "Estoy para quedarme!",
 };
@@ -149,6 +152,9 @@ const Layout = React.forwardRef<
             </Link>
             <Link href={"/about"} passHref={true}>
               <NavLink>{t("layout.routes.about")}</NavLink>
+            </Link>
+            <Link href={"/posts"} passHref={true}>
+              <NavLink>{t("layout.routes.blog")}</NavLink>
             </Link>
             {data?.getPinnedPublicPaths.map((i) => {
               return (
