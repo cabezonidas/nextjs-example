@@ -94,6 +94,12 @@ const IndexPage = ({
             </Box>
           </>
         )}
+
+        {!!olderPosts.length && !translatedLatest && (
+          <Box textAlign="center" my="6">
+            Parece que aún no hay entradas. Regresa más tarde 😊
+          </Box>
+        )}
       </Box>
     </Layout>
   );
