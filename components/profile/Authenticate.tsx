@@ -16,7 +16,9 @@ import {
   Button,
   Alert,
   Loading,
+  useToast,
 } from "@cabezonidas/shop-ui";
+import { setAccessToken } from "../../lib/accessToken";
 
 const enUs = {};
 const esAr = {};
@@ -66,6 +68,8 @@ export const Authenticate = forwardRef<
     { loading: renewingCode, data: renewData },
   ] = useRenewCodeLoginMutation();
 
+  const { notify } = useToast();
+
   return (
     <>
       {!mailData ? (
@@ -111,6 +115,9 @@ export const Authenticate = forwardRef<
               loginWithToken({
                 variables: { email, token: code },
                 update: (store, { data }) => {
+                  notify("Muy bien! Ya haz validado tu email 🎉", {
+                    variant: "success",
+                  });
                   if (data) {
                     store.writeQuery<MeQuery>({
                       query: MeDocument,
@@ -118,6 +125,7 @@ export const Authenticate = forwardRef<
                         me: data.loginWithToken.user,
                       },
                     });
+                    setAccessToken(data.loginWithToken.accessToken);
                   }
                 },
               });
@@ -168,6 +176,7 @@ export const Authenticate = forwardRef<
                         me: data.login.user,
                       },
                     });
+                    setAccessToken(data.login.accessToken);
                   }
                 },
               });
