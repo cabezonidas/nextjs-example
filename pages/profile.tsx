@@ -1,11 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
-import {
-  useMeQuery,
-  useLogoutMutation,
-  MeQuery,
-  MeDocument,
-} from "../graphql-queries";
+import { useMeQuery, useLogoutMutation } from "../graphql-queries";
 import { useTranslation, H1, Dialog, Box, Button } from "@cabezonidas/shop-ui";
 import { Authenticate } from "../components/profile/Authenticate";
 import { setAccessToken } from "../lib/accessToken";
@@ -60,22 +55,20 @@ const ProfilePage = () => {
               </Box>
             </Box>
           )}
-          <Box width="100%" justifyContent="space-around" display="flex">
-            <Button
-              mt="4"
-              disabled={loggingOut}
-              onClick={async () => {
-                await logout();
-                if (client) {
-                  await client.clearStore();
-                }
-                router.push("/");
-                setAccessToken("");
-              }}
-            >
-              {t("profile.logOut")}
-            </Button>
-          </Box>
+          <Button
+            mt="8"
+            disabled={loggingOut}
+            onClick={async () => {
+              await logout();
+              if (client) {
+                await client.clearStore();
+              }
+              router.push("/");
+              setAccessToken("");
+            }}
+          >
+            {t("profile.logOut")}
+          </Button>
         </>
       )}
     </Layout>
