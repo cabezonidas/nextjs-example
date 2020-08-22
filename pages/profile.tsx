@@ -13,13 +13,11 @@ import { useRouter } from "next/router";
 
 const enUs = {
   title: "Profile",
-  modalTitle: "Start by logging in",
   modalFooter: "If you don't have an account, it will create one for you",
   logOut: "Log out",
 };
 const esAr = {
   title: "Perfil",
-  modalTitle: "Inicia sesión",
   modalFooter: "Si no posees una cuenta, se creará una ahora",
   logOut: "Salir",
 };
@@ -42,8 +40,6 @@ const ProfilePage = () => {
       <Dialog
         aria-label={t("profile.modalTitle")}
         isOpen={!loading && data && !data.me}
-        // onDismiss={() => router.push("/")}
-        header={t("profile.modalTitle")}
         footer={t("profile.modalFooter")}
       >
         <Authenticate />
