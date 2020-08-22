@@ -74,16 +74,28 @@ export const HomeFlorida = () => {
           </UnorderedList>
         </Box>
         <Link href="/pinned" passHref={true}>
-          <Button
-            variant="primary"
-            zIndex={1}
-            width="min-content"
-            my={[4, 5, 6, 7]}
-            mx="auto"
-            as="a"
+          <Box
+            justifyContent="space-between"
+            display="flex"
+            height="100%"
+            width="100%"
+            maxWidth="400px"
+            ml="auto"
+            p={[4, 5, 6, 7, 8]}
           >
-            Invertir ahora
-          </Button>
+            <Link href="/pinned" passHref={true}>
+              <Button
+                variant="primary"
+                zIndex={1}
+                width="min-content"
+                my={[4, 5, 6, 7]}
+                mx="auto"
+                as="a"
+              >
+                Invertir ahora
+              </Button>
+            </Link>
+          </Box>
         </Link>
         <Box
           zIndex={0}
