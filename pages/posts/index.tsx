@@ -30,7 +30,7 @@ const IndexPage = ({
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
 
-  const [latest, ...rest] = items.posts;
+  const [latest, ...rest] = items?.posts ?? [];
   const [oldPostsTotal, setOldPostsTotal] = useState(
     Math.max(items.total - 1, 0)
   );
