@@ -85,7 +85,7 @@ export const Authenticate = forwardRef<
               id="email"
               value={email}
               type="username"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim())}
             />
             {!validEmail && email && (
               <Alert variant="danger">Email inválido</Alert>
