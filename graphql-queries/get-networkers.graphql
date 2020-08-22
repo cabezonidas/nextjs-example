@@ -1,0 +1,7 @@
+query GetNetworkers {
+  getNetworkers {
+    _id
+    name
+    email
+  }
+}
