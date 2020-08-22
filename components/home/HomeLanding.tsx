@@ -85,14 +85,14 @@ export const HomeLanding = () => {
             width="max-content"
             m="auto"
           >
-            <Link href="/posts" passHref={true}>
+            <Link href="/pinned" passHref={true}>
               <Button variant="default" as="a">
                 Ver proyectos
               </Button>
             </Link>
-            <Link href="/pinned" passHref={true}>
+            <Link href="/posts" passHref={true}>
               <Button variant="primary" as="a">
-                Invertir ahora
+                Blog
               </Button>
             </Link>
           </Box>
