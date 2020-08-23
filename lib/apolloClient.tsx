@@ -12,6 +12,7 @@ import { refreshTokenlUrl, graphqlUrl } from "../utils/config";
 import React from "react";
 import Head from "next/head";
 import cookie from "cookie";
+import { getLanguage } from "./localStorage";
 
 export const isServer = () => typeof window === "undefined";
 
@@ -21,6 +22,9 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
   const httpLink = new HttpLink({
     uri: graphqlUrl,
     credentials: "include",
+    headers: {
+      "Accept-Language": getLanguage() || "es-AR",
+    },
     fetch,
   });
 
@@ -48,6 +52,9 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
       return fetch(refreshTokenlUrl, {
         method: "POST",
         credentials: "include",
+        headers: {
+          "Accept-Language": getLanguage() || "es-AR",
+        },
       });
     },
     handleFetch: (accessToken) => {
@@ -65,6 +72,7 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
       headers: {
         ...headers,
         authorization: token ? `bearer ${token}` : "",
+        "Accept-Language": getLanguage() || "es-AR",
       },
     };
   });
