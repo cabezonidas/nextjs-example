@@ -16,10 +16,21 @@ import {
   Email,
   SvgIcon,
   Svg,
+  Toggle,
+  useTheme,
+  Select,
+  Option,
 } from "@cabezonidas/shop-ui";
 import { useGetPinnedPublicPathsQuery, useMeQuery } from "../graphql-queries";
 import { usePostMapping } from "../utils/helpers";
 import { companyName } from "../utils/config";
+import {
+  toggleDarkMode,
+  prependLocaleFlag,
+  setLanguage,
+  getLanguage,
+} from "../lib/localStorage";
+import { theme } from "@cabezonidas/shop-ui/lib/theme/theme";
 
 type Props = {
   documentTitle?: string | null;
@@ -34,7 +45,10 @@ const enUsRoutes = {
     profile: "Profile",
     blog: "Blog",
   },
-  footer: "I'm here to stay!",
+  footer: {
+    darkMode: "Dark mode",
+    language: "Language",
+  },
 };
 const esArRoutes = {
   routes: {
@@ -45,7 +59,10 @@ const esArRoutes = {
     profile: "Profile",
     blog: "Blog",
   },
-  footer: "Estoy para quedarme!",
+  footer: {
+    darkMode: "Modo oscuro",
+    language: "Language",
+  },
 };
 
 const Layout = React.forwardRef<
@@ -53,7 +70,7 @@ const Layout = React.forwardRef<
   React.ComponentProps<typeof Box> & Props
 >((props, ref) => {
   const { documentTitle, children, onMainScrollBottom, ...boxProps } = props;
-  const { t, i18n } = useTranslation();
+  const { t, i18n, languages } = useTranslation();
   const { getPostTitle } = usePostMapping();
   i18n.addResourceBundle(
     "en-US",
@@ -74,6 +91,8 @@ const Layout = React.forwardRef<
   const { data: meData } = useMeQuery();
 
   const logged = !!meData?.me;
+
+  const { mode, setThemeMode } = useTheme();
 
   return (
     <>
@@ -174,10 +193,42 @@ const Layout = React.forwardRef<
           <Box display="flex" justifyContent="space-between">
             <Box
               display="grid"
-              gridTemplateColumns="repeat(5, 50px)"
-              width="max-width"
-              ml="auto"
+              gridTemplateColumns="auto 1fr 50px 50px 50px 50px 50px"
+              width="100%"
+              alignItems="center"
             >
+              <Toggle
+                style={{ transform: "scale(0.8)" }}
+                aria-label={t("layout.footer.darkMode")}
+                variant={"dark-mode"}
+                checked={mode === "dark"}
+                onChange={() => {
+                  const newMode = toggleDarkMode();
+                  setThemeMode(newMode);
+                }}
+              />
+              <Select
+                id="language"
+                value={getLanguage()}
+                onChange={(e) => {
+                  const lng = e.target.value;
+                  setLanguage(lng);
+                  i18n.changeLanguage(lng);
+                }}
+                aria-label={t("layout.footer.language")}
+                style={{
+                  marginRight: "auto",
+                  width: "max-content",
+                  // color: theme.colors.neutral.darkest,
+                  color: theme.colors.neutral.lightest,
+                }}
+              >
+                {languages.map((l) => (
+                  <Option key={l.localeId} value={l.localeId}>
+                    {prependLocaleFlag(l.localeId, l.name)}
+                  </Option>
+                ))}
+              </Select>
               <FooterLink href="mailto:latamtradingclub@gmail.com">
                 <Email />
               </FooterLink>
