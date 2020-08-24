@@ -13,6 +13,9 @@ import React from "react";
 import Head from "next/head";
 import cookie from "cookie";
 import { getLanguage } from "./localStorage";
+import { parseCookies } from "../utils/helpers";
+
+const languageHeader = () => ({ "Accept-Language": getLanguage() || "es-AR" });
 
 export const isServer = () => typeof window === "undefined";
 
@@ -23,7 +26,7 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
     uri: graphqlUrl,
     credentials: "include",
     headers: {
-      "Accept-Language": getLanguage() || "es-AR",
+      ...languageHeader(),
     },
     fetch,
   });
@@ -53,7 +56,7 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
         method: "POST",
         credentials: "include",
         headers: {
-          "Accept-Language": getLanguage() || "es-AR",
+          ...languageHeader(),
         },
       });
     },
@@ -72,7 +75,7 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
       headers: {
         ...headers,
         authorization: token ? `bearer ${token}` : "",
-        "Accept-Language": getLanguage() || "es-AR",
+        ...languageHeader(),
       },
     };
   });
@@ -131,6 +134,8 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
 
       let serverAccessToken = "";
 
+      const cookies = parseCookies(req);
+
       if (isServer()) {
         const cookies = cookie.parse(req.headers.cookie || "");
         if (cookies.jid) {
@@ -154,9 +159,12 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
         serverAccessToken
       ));
 
-      const pageProps = PageComponent.getInitialProps
-        ? await PageComponent.getInitialProps(ctx)
-        : {};
+      const pageProps = {
+        ...(PageComponent.getInitialProps
+          ? await PageComponent.getInitialProps(ctx)
+          : {}),
+        cookies,
+      };
 
       // Only on the server
       if (typeof window === "undefined") {
@@ -177,6 +185,7 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
                   apolloClient,
                 }}
                 apolloClient={apolloClient}
+                cookies={cookies}
               />
             );
           } catch (error) {
