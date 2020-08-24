@@ -1,3 +1,5 @@
+import Cookie from "js-cookie";
+
 type DarkMode = "dark" | "light";
 type Language = "en-US" | "es-AR";
 let darkMode: DarkMode = "dark";
@@ -6,19 +8,7 @@ const locales: Language[] = ["es-AR", "en-US"];
 
 export const toggleDarkMode = () => {
   darkMode = darkMode === "dark" ? "light" : "dark";
-  if (typeof localStorage !== "undefined") {
-    localStorage.setItem("darkMode", darkMode);
-  }
-  return darkMode;
-};
-
-export const getDarkMode = () => {
-  if (typeof localStorage !== "undefined") {
-    darkMode =
-      (["dark", "light"].find(
-        (m) => m === localStorage.getItem("darkMode")
-      ) as DarkMode) ?? darkMode;
-  }
+  Cookie.set("darkMode", darkMode);
   return darkMode;
 };
 
