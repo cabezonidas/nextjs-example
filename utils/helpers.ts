@@ -4,6 +4,7 @@ import {
   transform,
 } from "@cabezonidas/shop-ui";
 import { Title, Post, PostData } from "../graphql-queries";
+import cookie from "cookie";
 
 export const usePostMapping = () => {
   const {
@@ -62,3 +63,6 @@ export const usePostMapping = () => {
 
   return { getPostTitle, getTranslatedPost, getPreviewImage, getMetaImage };
 };
+
+export const parseCookies = (req: any) =>
+  cookie.parse(req ? req.headers?.cookie || "" : document.cookie);
