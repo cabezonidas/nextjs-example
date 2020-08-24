@@ -8,17 +8,17 @@ import "highlight.js/styles/default.css";
 import "@cabezonidas/shop-ui/assets/style.css";
 import "./../styles.css";
 import { withApollo } from "../lib/apolloClient";
-import { getDarkMode } from "../lib/localStorage";
 import "../utils/i18n";
 
 function MyApp({
   Component,
   pageProps,
   apolloClient,
-}: AppProps & { apolloClient: any }) {
+  cookies,
+}: AppProps & { apolloClient: any; cookies: any }) {
   return (
     <ApolloProvider client={apolloClient}>
-      <UiProvider suspense={false} mode={getDarkMode()}>
+      <UiProvider suspense={false} mode={cookies.darkMode}>
         <Component {...pageProps} />
       </UiProvider>
     </ApolloProvider>
