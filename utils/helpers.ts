@@ -65,4 +65,8 @@ export const usePostMapping = () => {
 };
 
 export const parseCookies = (req: any) =>
-  cookie.parse(req ? req.headers?.cookie || "" : document.cookie);
+  cookie.parse(
+    req
+      ? req.headers?.cookie || ""
+      : (typeof document !== "undefined" && document.cookie) || ""
+  );
