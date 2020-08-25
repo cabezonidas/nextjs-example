@@ -13,6 +13,7 @@ import { keyframes } from "@emotion/core";
 import { companyName } from "../../utils/config";
 
 const esAr = {
+  title: "Proceso de inversión",
   step1: "Nuevos inversores",
   step2: "Acceden al crowdfunding inmobiliario de Renta Fija",
   step3: `Realizan el aporte a ${companyName}`,
@@ -22,7 +23,16 @@ const esAr = {
   step7: "Distribución de la renta de alquileres a inversores",
 };
 
-const enUs = {};
+const enUs = {
+  title: "Investment workflow",
+  step1: "New investors join us",
+  step2: "They start with our fixed interest crowdfunding",
+  step3: `Make a payment to ${companyName}`,
+  step4: `${companyName} buys the property`,
+  step5: `${companyName} hands over a legal contract from our US branch`,
+  step6: "The house becomes a rental property",
+  step7: "The passive income is distributed over to the investors",
+};
 
 const totalTime = 2500;
 const breath = (totalTime / 5) * 2;
@@ -68,6 +78,7 @@ export const HomeProcess = () => {
     { text: t("index.step7"), color: "#b1ba71" },
   ];
 
+  // TODO Clean state, check mounted
   useEffect(() => {
     const breathing = () => {
       setGrowing(false);
@@ -111,7 +122,7 @@ export const HomeProcess = () => {
           pt={[3, 6, 7]}
           zIndex={1}
         >
-          Proceso de inversión
+          {t("index.title")}
         </Box>
         <Box m="auto" zIndex={0}>
           <Box style={{ transform: `scale(${scale})` }}>

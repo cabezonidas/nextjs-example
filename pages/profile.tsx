@@ -11,11 +11,16 @@ const enUs = {
   title: "Profile",
   modalFooter: "If you don't have an account, it will create one for you",
   logOut: "Log out",
+  please_complete: "Solo queda que nos confirmes la siguiente información:",
+  thanks: `Muchas gracias {{name}} por haberte registrado con nosotros. A la brevedad estaremos en contactor contigo.`,
 };
 const esAr = {
   title: "Perfil",
   modalFooter: "Si no posees una cuenta, se creará una ahora",
   logOut: "Salir",
+  please_complete:
+    "We're almost there! Please, confirm the following information:",
+  thanks: `Thanks {{name}} for joining us. We'll get back to you asap..`,
 };
 
 const ProfilePage = () => {
@@ -44,15 +49,12 @@ const ProfilePage = () => {
         <>
           {!data.me.name ? (
             <>
-              <Box>Solo queda que nos confirmes la siguiente información: </Box>
+              <Box>{t("profile.please_complete")}</Box>
               <AboutYou user={data.me} />
             </>
           ) : (
             <Box>
-              <Box>
-                Muchas gracias {data.me.name} por haberte registrado con
-                nosotros. A la brevedad estaremos en contactor contigo.
-              </Box>
+              <Box>{t("profile.thanks", { name: data.me.name })}</Box>
             </Box>
           )}
           <Button

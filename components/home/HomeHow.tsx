@@ -10,12 +10,42 @@ import { Section } from "./Section";
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 
-const esAr = {};
+const esAr = {
+  home: {
+    how: {
+      how_to_invest: "¿Cómo comenzar a invertir?",
+      sub_heading:
+        "Te proponemos que comiences a rentabilizar tus ahorros con nuestro Crowdfunding Inmobiliario.",
+      step1:
+        "Se registra en nuestra plataforma web rápido y seguro. Elige el plan de Inversion.",
+      step2:
+        "Se envía el dinero a la cuenta corporativa de Latam Investing Club en USA.",
+      step3: "Se firma el contrato digital.",
+      step4:
+        "Disfruta de una renta segura, en dólares y sustentable en el tiempo.",
+      register_now: "Regístrate ahora",
+    },
+  },
+};
 
-const enUs = {};
+const enUs = {
+  home: {
+    how: {
+      how_to_invest: "Let's get started",
+      sub_heading:
+        "We invite you to start making worth from your savings with our crowdfunding.",
+      step1: "Sign up online and choose and investment plan.",
+      step2:
+        "Pay the investment capital you feel like to our corporate account in the US.",
+      step3: "We sign the contract.",
+      step4: "You enjoy a guaranteed and sustainable rent in US dollars.",
+      register_now: "Register now",
+    },
+  },
+};
 
 export const HomeHow = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
@@ -34,7 +64,7 @@ export const HomeHow = () => {
             transition: "transform 1s, opacity 1s",
           }}
         >
-          ¿Cómo comenzar a invertir?
+          {t("index.home.how.how_to_invest")}
         </Box>
         <SubTitle
           my={[1, 2, 4, 6, 8]}
@@ -42,8 +72,7 @@ export const HomeHow = () => {
           maxWidth="80%"
           m="auto"
         >
-          Te proponemos que comiences a rentabilizar tus ahorros con nuestro
-          Crowdfunding Inmobiliario.
+          {t("index.home.how.sub_heading")}
         </SubTitle>
         <UnorderedList
           inView={inView}
@@ -51,30 +80,21 @@ export const HomeHow = () => {
           maxWidth={["max-content", "max-content", "800px"]}
         >
           <Card>
-            <Paragraph>
-              Se registra en nuestra plataforma web rápido y seguro.
-            </Paragraph>
+            <Paragraph>{t("index.home.how.step1")}</Paragraph>
           </Card>
           <Card>
-            <Paragraph>Elige el plan de Inversion.</Paragraph>
+            <Paragraph>{t("index.home.how.step2")}</Paragraph>
           </Card>
           <Card>
-            <Paragraph>
-              Se envía el dinero a la cuenta corporativa de Latam Investing Club
-              en USA.
-            </Paragraph>
-            <Paragraph>Se firma el contrato digital.</Paragraph>
+            <Paragraph>{t("index.home.how.step3")}</Paragraph>
           </Card>
           <Card>
-            <Paragraph>
-              Disfruta de una renta segura, en dólares y sustentable en el
-              tiempo.
-            </Paragraph>
+            <Paragraph>{t("index.home.how.step4")}</Paragraph>
           </Card>
         </UnorderedList>
         <Link href="/profile" passHref={true}>
           <Button variant="primary" mt="2" as="a">
-            Regístrate ahora
+            {t("index.home.how.register_now")}
           </Button>
         </Link>
       </StyledSection>

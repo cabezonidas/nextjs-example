@@ -16,13 +16,12 @@ const enUs = {
   title: "Us",
   mission: "Mission",
   missionBody:
-    "Proporcionar acceso al sistema financiero del mundo en un solo clic. Juntos trabajamos en invertir el dinero para mejorar la vida cotidiana de las personas.",
+    "Provide access to the world's financial system in one click. Together we work to invest money to improve people's daily lives.",
   vision: "Vision",
   visionBody:
-    "Ser un empresa global, responsable maximizando el rendimiento para los inversores y aportando para un mundo mejor.",
-  values: "Valores",
-  valuesBody:
-    "Excelencia, honestidad, transparencia, responsabilidad y pasión.",
+    "To be a global, responsible company, maximizing returns for investors and contributing to a better world.",
+  values: "Values",
+  valuesBody: "Excellence, honesty, transparency, responsibility and passion.",
   team: "Our team",
 };
 const esAr = {
@@ -48,13 +47,13 @@ const AboutPage = () => {
     <Layout documentTitle={t("about.title")}>
       <H1 mb="4">{t("about.title")}</H1>
       <Box display="grid" gridGap="4">
+        <AboutCommitment />
         <H2>{t("about.mission")}</H2>
         <Paragraph>{t("about.missionBody")}</Paragraph>
         <H2>{t("about.vision")}</H2>
         <Paragraph>{t("about.visionBody")}</Paragraph>
         <H2>{t("about.values")}</H2>
         <Paragraph>{t("about.valuesBody")}</Paragraph>
-        <AboutCommitment />
         <H2>{t("about.team")}</H2>
         <Box display="grid" gridGap="6">
           {data?.getStaff.map((s) => (

@@ -13,9 +13,11 @@ import { PostPreview } from "../../components/PostPreview";
 
 const enUs = {
   title: "Investment catalog",
+  subtitle: "Real state projects",
 };
 const esAr = {
   title: "Catálogo de inversiones",
+  subtitle: "Proyectos inmobiliarios",
 };
 
 const Pinned = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -35,11 +37,10 @@ const Pinned = ({ items }: InferGetStaticPropsType<typeof getStaticProps>) => {
     true
   );
   const { getTranslatedPost } = usePostMapping();
-  // TODO Add description to investments
   return (
     <Layout documentTitle="Pinned">
       <H1>{t("pinnedIndex.title")}</H1>
-      <H3 mb="4">Proyectos inmobiliarios</H3>
+      <H3 mb="4">{t("pinnedIndex.subtitle")}</H3>
       <Box display="grid" gridGap="6" my="2">
         {items?.map((pinned, index) => {
           const translatedPinned = getTranslatedPost(pinned);
