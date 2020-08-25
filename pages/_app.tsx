@@ -11,20 +11,17 @@ import "./../styles.css";
 import { withApollo } from "../lib/apolloClient";
 import "../utils/i18n";
 import { languages } from "../utils/i18n";
+import { getState } from "../utils/helpers";
 
 function MyApp({
   Component,
   pageProps,
   apolloClient,
-  cookies,
-}: AppProps & { apolloClient: any; cookies: any }) {
+}: AppProps & { apolloClient: any }) {
+  const { darkMode } = getState();
   return (
     <ApolloProvider client={apolloClient}>
-      <UiProvider
-        suspense={false}
-        mode={cookies.darkMode}
-        languages={languages}
-      >
+      <UiProvider suspense={false} mode={darkMode} languages={languages}>
         <Component {...pageProps} />
       </UiProvider>
     </ApolloProvider>

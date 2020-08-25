@@ -32,7 +32,7 @@ const IndexPage = ({
 
   const [latest, ...rest] = items?.posts ?? [];
   const [oldPostsTotal, setOldPostsTotal] = useState(
-    Math.max(items.total - 1, 0)
+    Math.max((items?.total ?? 0) - 1, 0)
   );
   const translatedLatest = getTranslatedPost(latest);
 

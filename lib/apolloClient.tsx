@@ -11,26 +11,22 @@ import { ApolloLink } from "apollo-link";
 import { refreshTokenlUrl, graphqlUrl } from "../utils/config";
 import React from "react";
 import Head from "next/head";
-import { parseCookies } from "../utils/helpers";
+import { parseCookies, getState } from "../utils/helpers";
 
 export const isServer = () => typeof window === "undefined";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const acceptLanguage = (serverLanguage?: string) => ({
-  "Accept-Language": serverLanguage ?? parseCookies("").language ?? "es-AR",
+const acceptLanguage = () => ({
+  "Accept-Language": getState().language,
 });
 
-function createApolloClient(
-  initialState = {},
-  serverAccessToken?: string,
-  serverLanguage?: string
-) {
+function createApolloClient(initialState = {}, serverAccessToken?: string) {
   const httpLink = new HttpLink({
     uri: graphqlUrl,
     credentials: "include",
     fetch,
-    headers: { ...acceptLanguage(serverLanguage) },
+    headers: { ...acceptLanguage() },
   });
 
   const refreshLink = new TokenRefreshLink({
@@ -57,7 +53,7 @@ function createApolloClient(
       return fetch(refreshTokenlUrl, {
         method: "POST",
         credentials: "include",
-        headers: { ...acceptLanguage(serverLanguage) },
+        headers: { ...acceptLanguage() },
       });
     },
     handleFetch: (accessToken) => {
@@ -75,7 +71,7 @@ function createApolloClient(
       headers: {
         ...headers,
         authorization: token ? `bearer ${token}` : "",
-        ...acceptLanguage(serverLanguage),
+        ...acceptLanguage(),
       },
     };
   });
@@ -94,13 +90,12 @@ function createApolloClient(
 
 export function initializeApollo(
   initialState?: any,
-  serverAccessToken?: string,
-  serverLanguage?: string
+  serverAccessToken?: string
 ) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (isServer()) {
-    return createApolloClient(initialState, serverAccessToken, serverLanguage);
+    return createApolloClient(initialState, serverAccessToken);
   }
 
   // Reuse client on the client-side
@@ -134,7 +129,6 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
 
       let serverAccessToken = "";
       const cookies = parseCookies(req);
-      let serverLanguage = cookies.language;
 
       if (isServer()) {
         if (cookies.jid) {
@@ -155,15 +149,13 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
       // and extract the resulting data
       const apolloClient = (ctx.ctx.apolloClient = initializeApollo(
         {},
-        serverAccessToken,
-        serverLanguage
+        serverAccessToken
       ));
 
       const pageProps = {
         ...(PageComponent.getInitialProps
           ? await PageComponent.getInitialProps(ctx)
           : {}),
-        cookies,
       };
 
       // Only on the server
@@ -185,7 +177,6 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
                   apolloClient,
                 }}
                 apolloClient={apolloClient}
-                cookies={cookies}
               />
             );
           } catch (error) {
@@ -208,7 +199,6 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
         ...pageProps,
         apolloState,
         serverAccessToken,
-        serverLanguage,
       };
     };
   }

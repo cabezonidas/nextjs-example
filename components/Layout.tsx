@@ -21,10 +21,8 @@ import {
   LanguageButton,
 } from "@cabezonidas/shop-ui";
 import { useGetPinnedPublicPathsQuery, useMeQuery } from "../graphql-queries";
-import { usePostMapping } from "../utils/helpers";
+import { usePostMapping, setState } from "../utils/helpers";
 import { companyName } from "../utils/config";
-import { toggleDarkMode } from "../lib/darkMode";
-import Cookie from "js-cookie";
 
 type Props = {
   documentTitle?: string | null;
@@ -89,8 +87,13 @@ const Layout = React.forwardRef<
   const { mode, setThemeMode } = useTheme();
 
   React.useEffect(() => {
-    Cookie.set("language", i18n.language);
+    setState((prev) => ({ ...prev, language: i18n.language as any }));
   }, [i18n.language]);
+
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <>
@@ -107,129 +110,140 @@ const Layout = React.forwardRef<
         <meta property="og:locale:alternate" content="en_US" />
         <meta property="og:site_name" content={companyName} />
       </Head>
-      <ResponsiveLayout
-        header={
-          <Box display="grid" gridTemplateColumns="1fr auto">
-            <Link href="/" passHref={true}>
-              <Box
-                display="flex"
-                alignItems="center"
-                style={{ cursor: "pointer", userSelect: "none" }}
-              >
-                <InvestingClubLatam />
+      {mounted && (
+        <ResponsiveLayout
+          header={
+            <Box display="grid" gridTemplateColumns="1fr auto">
+              <Link href="/" passHref={true}>
                 <Box
-                  style={{
-                    textTransform: "uppercase",
-                    fontSize: "8px",
-                    marginLeft: "4px",
-                    maxWidth: "50px",
-                    maxHeight: "30px",
-                    overflow: "hidden",
-                    fontWeight: "bold",
-                  }}
+                  display="flex"
+                  alignItems="center"
+                  style={{ cursor: "pointer", userSelect: "none" }}
                 >
-                  <Box style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
-                    Latam
-                  </Box>
-                  <Box style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
-                    Investing
-                  </Box>
-                  <Box style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
-                    Club
+                  <InvestingClubLatam />
+                  <Box
+                    style={{
+                      textTransform: "uppercase",
+                      fontSize: "8px",
+                      marginLeft: "4px",
+                      maxWidth: "50px",
+                      maxHeight: "30px",
+                      overflow: "hidden",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <Box
+                      style={{ textOverflow: "ellipsis", overflow: "hidden" }}
+                    >
+                      Latam
+                    </Box>
+                    <Box
+                      style={{ textOverflow: "ellipsis", overflow: "hidden" }}
+                    >
+                      Investing
+                    </Box>
+                    <Box
+                      style={{ textOverflow: "ellipsis", overflow: "hidden" }}
+                    >
+                      Club
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            </Link>
-            <Box alignSelf="center" display="flex">
-              <Link href="/pinned" passHref={true}>
-                <HeaderLink>{t("layout.routes.pinned")}</HeaderLink>
               </Link>
-              <Link href="/about" passHref={true}>
-                <HeaderLink>{t("layout.routes.about")}</HeaderLink>
-              </Link>
-              <Link href="/profile" passHref={true}>
-                <HeaderLink
-                  display="flex"
-                  aria-label={t("layout.routes.profile")}
-                >
-                  {logged ? (
-                    <UserSvg alignSelf="center" width="16" height="16" />
-                  ) : (
-                    <KeySvg alignSelf="center" width="16" height="16" />
-                  )}
-                </HeaderLink>
-              </Link>
-            </Box>
-          </Box>
-        }
-        nav={
-          <>
-            <Link href="/" passHref={true}>
-              <NavLink>{t("layout.routes.home")}</NavLink>
-            </Link>
-            <Link href={"/about"} passHref={true}>
-              <NavLink>{t("layout.routes.about")}</NavLink>
-            </Link>
-            <Link href={"/posts"} passHref={true}>
-              <NavLink>{t("layout.routes.blog")}</NavLink>
-            </Link>
-            {data?.getPinnedPublicPaths.map((i) => {
-              return (
-                <Link
-                  key={i._id}
-                  href={"/pinned/[id]"}
-                  as={`/pinned/${i._id}`}
-                  passHref={true}
-                >
-                  <NavLink>{getPostTitle(i.titles)}</NavLink>
+              <Box alignSelf="center" display="flex">
+                <Link href="/pinned" passHref={true}>
+                  <HeaderLink>{t("layout.routes.pinned")}</HeaderLink>
                 </Link>
-              );
-            })}
-          </>
-        }
-        footer={
-          <Box display="flex" justifyContent="space-between">
-            <Box
-              display="grid"
-              gridTemplateColumns="auto 1fr 50px 50px 50px 50px 50px"
-              width="100%"
-              alignItems="center"
-            >
-              <Toggle
-                style={{ transform: "scale(0.8)" }}
-                aria-label={t("layout.footer.darkMode")}
-                variant={"dark-mode"}
-                checked={mode === "dark"}
-                onChange={() => {
-                  const newMode = toggleDarkMode();
-                  setThemeMode(newMode);
-                }}
-              />
-              <LanguageButton style={{ maxWidth: "max-content" }} />
-              <FooterLink href="mailto:latamtradingclub@gmail.com">
-                <Email />
-              </FooterLink>
-              <FooterLink href="https://api.whatsapp.com/send?phone=+5491151398747">
-                <Whatsapp />
-              </FooterLink>
-              <FooterLink href="https://www.instagram.com/tradingclublatam">
-                <Instagram />
-              </FooterLink>
-              <FooterLink href="https://www.facebook.com/latamtradingclub">
-                <Facebook />
-              </FooterLink>
-              <FooterLink href="https://www.messenger.com/t/latamtradingclub">
-                <Messenger />
-              </FooterLink>
+                <Link href="/about" passHref={true}>
+                  <HeaderLink>{t("layout.routes.about")}</HeaderLink>
+                </Link>
+                <Link href="/profile" passHref={true}>
+                  <HeaderLink
+                    display="flex"
+                    aria-label={t("layout.routes.profile")}
+                  >
+                    {logged ? (
+                      <UserSvg alignSelf="center" width="16" height="16" />
+                    ) : (
+                      <KeySvg alignSelf="center" width="16" height="16" />
+                    )}
+                  </HeaderLink>
+                </Link>
+              </Box>
             </Box>
+          }
+          nav={
+            <>
+              <Link href="/" passHref={true}>
+                <NavLink>{t("layout.routes.home")}</NavLink>
+              </Link>
+              <Link href={"/about"} passHref={true}>
+                <NavLink>{t("layout.routes.about")}</NavLink>
+              </Link>
+              <Link href={"/posts"} passHref={true}>
+                <NavLink>{t("layout.routes.blog")}</NavLink>
+              </Link>
+              {data?.getPinnedPublicPaths.map((i) => {
+                return (
+                  <Link
+                    key={i._id}
+                    href={"/pinned/[id]"}
+                    as={`/pinned/${i._id}`}
+                    passHref={true}
+                  >
+                    <NavLink>{getPostTitle(i.titles)}</NavLink>
+                  </Link>
+                );
+              })}
+            </>
+          }
+          footer={
+            <Box display="flex" justifyContent="space-between">
+              <Box
+                display="grid"
+                gridTemplateColumns="auto 1fr 50px 50px 50px 50px 50px"
+                width="100%"
+                alignItems="center"
+              >
+                <Toggle
+                  style={{ transform: "scale(0.8)" }}
+                  aria-label={t("layout.footer.darkMode")}
+                  variant={"dark-mode"}
+                  checked={mode === "dark"}
+                  onChange={() => {
+                    const darkMode = mode === "dark" ? "light" : "dark";
+                    setState((prev) => ({ ...prev, darkMode }));
+                    setThemeMode(darkMode);
+                  }}
+                />
+                <Box style={{ maxWidth: "max-content" }}>
+                  <LanguageButton />
+                </Box>
+                <FooterLink href="mailto:latamtradingclub@gmail.com">
+                  <Email />
+                </FooterLink>
+                <FooterLink href="https://api.whatsapp.com/send?phone=+5491151398747">
+                  <Whatsapp />
+                </FooterLink>
+                <FooterLink href="https://www.instagram.com/tradingclublatam">
+                  <Instagram />
+                </FooterLink>
+                <FooterLink href="https://www.facebook.com/latamtradingclub">
+                  <Facebook />
+                </FooterLink>
+                <FooterLink href="https://www.messenger.com/t/latamtradingclub">
+                  <Messenger />
+                </FooterLink>
+              </Box>
+            </Box>
+          }
+          onMainScrollBottom={onMainScrollBottom}
+        >
+          <Box ref={ref} maxWidth="600px" mx="auto" px="2" pt="4" {...boxProps}>
+            {children}
           </Box>
-        }
-        onMainScrollBottom={onMainScrollBottom}
-      >
-        <Box ref={ref} maxWidth="600px" mx="auto" px="2" pt="4" {...boxProps}>
-          {children}
-        </Box>
-      </ResponsiveLayout>
+        </ResponsiveLayout>
+      )}
     </>
   );
 });
