@@ -11,24 +11,26 @@ import { ApolloLink } from "apollo-link";
 import { refreshTokenlUrl, graphqlUrl } from "../utils/config";
 import React from "react";
 import Head from "next/head";
-import cookie from "cookie";
-import { getLanguage } from "./localStorage";
 import { parseCookies } from "../utils/helpers";
-
-const languageHeader = () => ({ "Accept-Language": getLanguage() || "es-AR" });
 
 export const isServer = () => typeof window === "undefined";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-function createApolloClient(initialState = {}, serverAccessToken?: string) {
+const acceptLanguage = (serverLanguage?: string) => ({
+  "Accept-Language": serverLanguage ?? parseCookies("").language ?? "es-AR",
+});
+
+function createApolloClient(
+  initialState = {},
+  serverAccessToken?: string,
+  serverLanguage?: string
+) {
   const httpLink = new HttpLink({
     uri: graphqlUrl,
     credentials: "include",
-    headers: {
-      ...languageHeader(),
-    },
     fetch,
+    headers: { ...acceptLanguage(serverLanguage) },
   });
 
   const refreshLink = new TokenRefreshLink({
@@ -55,9 +57,7 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
       return fetch(refreshTokenlUrl, {
         method: "POST",
         credentials: "include",
-        headers: {
-          ...languageHeader(),
-        },
+        headers: { ...acceptLanguage(serverLanguage) },
       });
     },
     handleFetch: (accessToken) => {
@@ -75,7 +75,7 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
       headers: {
         ...headers,
         authorization: token ? `bearer ${token}` : "",
-        ...languageHeader(),
+        ...acceptLanguage(serverLanguage),
       },
     };
   });
@@ -94,17 +94,17 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
 
 export function initializeApollo(
   initialState?: any,
-  serverAccessToken?: string
+  serverAccessToken?: string,
+  serverLanguage?: string
 ) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (isServer()) {
-    return createApolloClient(initialState, serverAccessToken);
+    return createApolloClient(initialState, serverAccessToken, serverLanguage);
   }
 
   // Reuse client on the client-side
   if (!apolloClient) {
-    // setAccessToken(cookie.parse(document.cookie).test);
     apolloClient = createApolloClient(initialState);
   }
 
@@ -133,11 +133,10 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
       } = ctx;
 
       let serverAccessToken = "";
-
       const cookies = parseCookies(req);
+      let serverLanguage = cookies.language;
 
       if (isServer()) {
-        const cookies = cookie.parse(req.headers.cookie || "");
         if (cookies.jid) {
           const response = await fetch(refreshTokenlUrl, {
             method: "POST",
@@ -156,7 +155,8 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
       // and extract the resulting data
       const apolloClient = (ctx.ctx.apolloClient = initializeApollo(
         {},
-        serverAccessToken
+        serverAccessToken,
+        serverLanguage
       ));
 
       const pageProps = {
@@ -208,6 +208,7 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
         ...pageProps,
         apolloState,
         serverAccessToken,
+        serverLanguage,
       };
     };
   }
