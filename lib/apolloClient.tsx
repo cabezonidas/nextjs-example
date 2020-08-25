@@ -11,17 +11,22 @@ import { ApolloLink } from "apollo-link";
 import { refreshTokenlUrl, graphqlUrl } from "../utils/config";
 import React from "react";
 import Head from "next/head";
-import cookie from "cookie";
+import { parseCookies, getState } from "../utils/helpers";
 
 export const isServer = () => typeof window === "undefined";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
+
+const acceptLanguage = () => ({
+  "Accept-Language": getState().language,
+});
 
 function createApolloClient(initialState = {}, serverAccessToken?: string) {
   const httpLink = new HttpLink({
     uri: graphqlUrl,
     credentials: "include",
     fetch,
+    headers: { ...acceptLanguage() },
   });
 
   const refreshLink = new TokenRefreshLink({
@@ -48,6 +53,7 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
       return fetch(refreshTokenlUrl, {
         method: "POST",
         credentials: "include",
+        headers: { ...acceptLanguage() },
       });
     },
     handleFetch: (accessToken) => {
@@ -65,6 +71,7 @@ function createApolloClient(initialState = {}, serverAccessToken?: string) {
       headers: {
         ...headers,
         authorization: token ? `bearer ${token}` : "",
+        ...acceptLanguage(),
       },
     };
   });
@@ -93,7 +100,6 @@ export function initializeApollo(
 
   // Reuse client on the client-side
   if (!apolloClient) {
-    // setAccessToken(cookie.parse(document.cookie).test);
     apolloClient = createApolloClient(initialState);
   }
 
@@ -122,9 +128,9 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
       } = ctx;
 
       let serverAccessToken = "";
+      const cookies = parseCookies(req);
 
       if (isServer()) {
-        const cookies = cookie.parse(req.headers.cookie || "");
         if (cookies.jid) {
           const response = await fetch(refreshTokenlUrl, {
             method: "POST",
@@ -146,9 +152,11 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
         serverAccessToken
       ));
 
-      const pageProps = PageComponent.getInitialProps
-        ? await PageComponent.getInitialProps(ctx)
-        : {};
+      const pageProps = {
+        ...(PageComponent.getInitialProps
+          ? await PageComponent.getInitialProps(ctx)
+          : {}),
+      };
 
       // Only on the server
       if (typeof window === "undefined") {

@@ -15,12 +15,16 @@ const esAr = {
   crowdFundingRealState: "Construye el futuro que quieras",
   landingPhrase: "Inversión segura en inmuebles",
   investInUsa: "Invertir en USA",
+  view_projects: "Ver proyectos",
+  blog: "Blog",
 };
 
 const enUs = {
   crowdFundingRealState: "Real state crowdfunding",
   landingPhrase: "Real state safe investment",
   investInUsa: "Invest in the US",
+  view_projects: "View projects",
+  blog: "Blog",
 };
 
 export const HomeLanding = () => {
@@ -87,12 +91,12 @@ export const HomeLanding = () => {
           >
             <Link href="/pinned" passHref={true}>
               <Button variant="default" as="a">
-                Ver proyectos
+                {t("index.view_projects")}
               </Button>
             </Link>
             <Link href="/posts" passHref={true}>
               <Button variant="primary" as="a">
-                Blog
+                {t("index.blog")}
               </Button>
             </Link>
           </Box>
@@ -127,7 +131,6 @@ const SubTitle = styled(H2)((props) => ({
   fontWeight: "bold",
   textTransform: "uppercase",
   textShadow: "0px 2px 2px rgb(103 102 102 / 37%)",
-  color: props.theme.colors.primary.lightest,
   padding: props.theme.space[3],
   fontSize: "unset",
 }));

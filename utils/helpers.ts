@@ -4,6 +4,8 @@ import {
   transform,
 } from "@cabezonidas/shop-ui";
 import { Title, Post, PostData } from "../graphql-queries";
+import cookie from "cookie";
+import React from "react";
 
 export const usePostMapping = () => {
   const {
@@ -61,4 +63,53 @@ export const usePostMapping = () => {
   };
 
   return { getPostTitle, getTranslatedPost, getPreviewImage, getMetaImage };
+};
+
+export const parseCookies = (req?: any) =>
+  cookie.parse(
+    req
+      ? req.headers?.cookie || ""
+      : (typeof document !== "undefined" && document.cookie) || ""
+  );
+
+const isBrowser = typeof window !== "undefined";
+
+type DarkMode = "dark" | "light";
+type Language = "es-AR" | "en-US";
+type State = { darkMode: DarkMode; language: Language };
+
+export const getState = (): State => {
+  const storedDarkMode =
+    (isBrowser && (localStorage.getItem("darkMode") ?? "")) || "dark";
+  const darkMode = (["dark", "light"].find((m) => m === storedDarkMode) ??
+    "dark") as DarkMode;
+
+  const storedLanguage =
+    (isBrowser && (localStorage.getItem("language") ?? "")) || "es-AR";
+  const language = (["es-AR", "en-US"].find((m) => m === storedLanguage) ??
+    "dark") as Language;
+
+  return { darkMode, language };
+};
+
+export const setState = (callback: (prev: State) => State) => {
+  const { language, darkMode } = callback(getState());
+  if (isBrowser) {
+    localStorage.setItem("darkMode", darkMode);
+    localStorage.setItem("language", language);
+  }
+  return { darkMode, language };
+};
+
+export const useIsMounted = () => {
+  const ref = React.useRef(false);
+  const [, setIsMounted] = React.useState(false);
+  React.useEffect(() => {
+    ref.current = true;
+    setIsMounted(true);
+    return () => {
+      ref.current = false;
+    };
+  }, []);
+  return () => ref.current;
 };

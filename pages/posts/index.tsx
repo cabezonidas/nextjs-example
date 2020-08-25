@@ -16,10 +16,12 @@ import Link from "next/link";
 
 const enUs = {
   olderPosts: "Previous entries",
+  no_entries: "Looks like there are no entries yet. Come back later! 😊",
 };
 
 const esAr = {
   olderPosts: "Últimas entradas",
+  no_entries: "Parece que aún no hay entradas. Regresa más tarde 😊",
 };
 
 const IndexPage = ({
@@ -32,7 +34,7 @@ const IndexPage = ({
 
   const [latest, ...rest] = items?.posts ?? [];
   const [oldPostsTotal, setOldPostsTotal] = useState(
-    Math.max(items.total - 1, 0)
+    Math.max((items?.total ?? 0) - 1, 0)
   );
   const translatedLatest = getTranslatedPost(latest);
 
@@ -97,7 +99,7 @@ const IndexPage = ({
 
         {!olderPosts.length && !translatedLatest && (
           <Box textAlign="center" my="6">
-            Parece que aún no hay entradas. Regresa más tarde 😊
+            {t("index.noEntries")}
           </Box>
         )}
       </Box>

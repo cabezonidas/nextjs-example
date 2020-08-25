@@ -10,12 +10,43 @@ import { Section } from "./Section";
 import { useInView } from "react-intersection-observer";
 import { forwardRef } from "react";
 
-const esAr = {};
+const esAr = {
+  home: {
+    workflow: {
+      benefits: "Nuestras ventajas",
+      head1: "Fondos colaborativos",
+      p1:
+        "Creamos un crowdfunding para facilitar el acceso a multiples inversionistas.",
+      head2: "Productos premium",
+      p2:
+        "Seleccionamos unidades de primera calidad y con alto potencial  de revalorizacion en USA.",
+      head3: "Renta inmediata",
+      p3: "Obtenga ganancias seguras y sostenibles en el tiempo",
+      head4: "Contratos internacionales",
+      p4: "Garantizamos el resguardo del capital y rentabilidades",
+    },
+  },
+};
 
-const enUs = {};
+const enUs = {
+  home: {
+    workflow: {
+      benefits: "Benefits",
+      head1: "Collaborative funds",
+      p1: "We open a crowdfund to get to multiple investors.",
+      head2: "Premium houses",
+      p2:
+        "Selection of units with the heighest standards with best potential in the US.",
+      head3: "Immediate rent",
+      p3: "You get your profit and passive income in the long term",
+      head4: "International contracts",
+      p4: "We make sure your capital gains are guaranteed",
+    },
+  },
+};
 
 export const HomeWorkflow = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
@@ -41,7 +72,7 @@ export const HomeWorkflow = () => {
             transition: "transform 1s, opacity 1s",
           }}
         >
-          Nuestras ventajas
+          {t("index.home.workflow.benefits")}
         </Box>
         <UnorderedList
           inView={inView}
@@ -54,11 +85,10 @@ export const HomeWorkflow = () => {
             </ImageBox>
 
             <Box>
-              <ParagraphHeader>Fondos colaborativos</ParagraphHeader>
-              <Text>
-                Creamos un crowdfunding para facilitar el acceso a multiples
-                inversionistas.
-              </Text>
+              <ParagraphHeader>
+                {t("index.home.workflow.head1")}
+              </ParagraphHeader>
+              <Text>{t("index.home.workflow.p1")}</Text>
             </Box>
           </Card>
           <Card>
@@ -66,11 +96,10 @@ export const HomeWorkflow = () => {
               <PremiumSvg />
             </ImageBox>
             <Box>
-              <ParagraphHeader>Productos premium</ParagraphHeader>
-              <Text>
-                Seleccionamos unidades de primera calidad y con alto potencial
-                de revalorizacion en USA.
-              </Text>
+              <ParagraphHeader>
+                {t("index.home.workflow.head2")}
+              </ParagraphHeader>
+              <Text>{t("index.home.workflow.p2")}</Text>
             </Box>
           </Card>
           <Card>
@@ -78,8 +107,10 @@ export const HomeWorkflow = () => {
               <ProfitSvg />
             </ImageBox>
             <Box>
-              <ParagraphHeader>Renta inmediata</ParagraphHeader>
-              <Text>Obtenga ganancias seguras y sostenibles en el tiempo</Text>
+              <ParagraphHeader>
+                {t("index.home.workflow.head3")}
+              </ParagraphHeader>
+              <Text>{t("index.home.workflow.p3")}</Text>
             </Box>
           </Card>
           <Card>
@@ -87,10 +118,10 @@ export const HomeWorkflow = () => {
               <ContractSvg />
             </ImageBox>
             <Box>
-              <ParagraphHeader>Contratos internacionales</ParagraphHeader>
-              <Text>
-                Garantizamos el resguardo del capital y rentabilidades
-              </Text>
+              <ParagraphHeader>
+                {t("index.home.workflow.head4")}
+              </ParagraphHeader>
+              <Text>{t("index.home.workflow.p4")}</Text>
             </Box>
           </Card>
         </UnorderedList>
@@ -99,16 +130,18 @@ export const HomeWorkflow = () => {
   );
 };
 
-const StyledSection = styled(Section)(({ theme: { colors } }) => ({
+const StyledSection = styled(Section)(({ theme: { mode } }) => ({
   textAlign: "center",
-  color: colors.neutral.dark,
   position: "relative",
-  backgroundColor: "#f5f5f5",
-  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='693' height='693' viewBox='0 0 200 200'%3E%3Cpolygon fill='%23f0f0f0' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E")`,
+  backgroundColor: mode === "light" ? "#f5f5f5" : `#363a3ee6`,
+  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='693' height='693' viewBox='0 0 200 200'%3E%3Cpolygon fill='${
+    mode === "light" ? "%23f0f0f0" : "%23363a3e"
+  }' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E")`,
 }));
 
 const UnorderedList = styled(Box.withComponent("ul"))<{ inView?: boolean }>(
-  ({ inView }) => ({
+  ({ inView, theme: { colors } }) => ({
+    color: colors.neutral.dark,
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
     margin: "auto",
@@ -126,11 +159,11 @@ const UnorderedList = styled(Box.withComponent("ul"))<{ inView?: boolean }>(
 );
 
 const Card = styled(Box.withComponent("li"))(
-  ({ theme: { colors, space } }) => ({
+  ({ theme: { colors, space, mode } }) => ({
     height: "100%",
     alignSelf: "center",
     border: `1px solid ${colors.secondary.darkest}`,
-    background: colors.neutral.lightest,
+    background: mode === "light" ? colors.neutral.lightest : "#dcdcdc",
     borderRadius: 5,
     boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
     justifyContent: "center",

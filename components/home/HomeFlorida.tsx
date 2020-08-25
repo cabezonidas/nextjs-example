@@ -10,13 +10,43 @@ import { Section } from "./Section";
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 
-const esAr = {};
+const esAr = {
+  home: {
+    florida: {
+      florida_oportunity: "Oportunidades en Florida",
+      florida_features:
+        "Clima espléndido, con playas paradisíacas, vida nocturna y ambiente artístico y cultural diverso todo el año.",
+      invest_now: "Invertir ahora",
+      anual_rates_from: "Retornos desde el 8% anual",
+      process:
+        "Compramos propiedades en Florida, administramos los alquileres y distribuimos la rentra entre los inversores",
+      simple_transparent: "Simple y transparente",
+      brand_phrase:
+        "Somos la única empresa del mercado que te asegura el 100% de tu capital y de los retornos. Contratos desde 2 años y desde cualquier país.",
+    },
+  },
+};
 
-const enUs = {};
+const enUs = {
+  home: {
+    florida: {
+      florida_oportunity: "Oportunities in Florida",
+      florida_features:
+        "Outstanding weather, paradise landscapes, nightlife and diverse and artistic atmospherey all year round.",
+      invest_now: "Invest now",
+      anual_rates_from: "Interests from 8% annually",
+      process:
+        "We buy properties in Florida, manage the rents and distribute the gains with the investors",
+      simple_transparent: "Easy and reliable",
+      brand_phrase:
+        "The only company in the market that guarantees 100% of for capital and profits. Contracts from 2 years no matter your country.",
+    },
+  },
+};
 
 export const HomeFlorida = () => {
-  const { i18n } = useTranslation();
-  const { colors } = useTheme();
+  const { t, i18n } = useTranslation();
+  const { colors, mode } = useTheme();
 
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
@@ -59,7 +89,7 @@ export const HomeFlorida = () => {
             fontSize={[4, 5]}
             style={{ textOverflow: "ellipsis", overflow: "hidden" }}
           >
-            Oportunidades en Florida
+            {t("index.home.florida.florida_oportunity")}
           </Box>
           <UnorderedList
             display="flex"
@@ -68,8 +98,7 @@ export const HomeFlorida = () => {
             inView={inView}
           >
             <Paragraph as="li" fontSize={[1, 2]} alignSelf="flex-start" mb="2">
-              Clima espléndido, con playas paradisíacas, vida nocturna y
-              ambiente artístico y cultural diverso todo el año.
+              {t("index.home.florida.florida_features")}
             </Paragraph>
           </UnorderedList>
         </Box>
@@ -92,7 +121,7 @@ export const HomeFlorida = () => {
                 mx="auto"
                 as="a"
               >
-                Invertir ahora
+                {t("index.home.florida.invest_now")}
               </Button>
             </Link>
           </Box>
@@ -109,8 +138,14 @@ export const HomeFlorida = () => {
       </Box>
       <Box height="100%" display="grid">
         <Box
-          bg={colors.neutral.lightest}
-          color={colors.neutral.darkest}
+          bg={
+            mode === "light"
+              ? colors.neutral.lightest
+              : colors.neutral.mediumDark
+          }
+          color={
+            mode === "light" ? colors.neutral.darkest : colors.neutral.lightest
+          }
           fontSize={[1, 2]}
           display="flex"
           p={[4, 5, 6, 7, 8]}
@@ -122,17 +157,16 @@ export const HomeFlorida = () => {
               style={{ textTransform: "uppercase" }}
               fontSize={[2, 3, 4]}
             >
-              Retornos desde el 8% anual
+              {t("index.home.florida.anual_rates_from")}
             </Box>
-            <Paragraph>
-              Compramos propiedades en Florida, administramos los alquileres y
-              distribuimos la rentra entre los inversores
-            </Paragraph>
+            <Paragraph>{t("index.home.florida.process")}</Paragraph>
           </Box>
         </Box>
         <Box
-          bg={colors.neutral.light}
-          color={colors.neutral.darkest}
+          bg={mode === "light" ? colors.neutral.light : colors.neutral.dark}
+          color={
+            mode === "light" ? colors.neutral.dark : colors.neutral.lightest
+          }
           fontSize={[1, 2]}
           display="flex"
           p={[4, 5, 6, 7, 8]}
@@ -144,13 +178,9 @@ export const HomeFlorida = () => {
               style={{ textTransform: "uppercase" }}
               fontSize={[2, 3, 4]}
             >
-              Simple y transparente
+              {t("index.home.florida.simple_transparent")}
             </Box>
-            <Paragraph>
-              Somos la única empresa del mercado que te asegura el 100% de tu
-              capital y de los retornos. Contratos desde 2 años y desde
-              cualquier país.
-            </Paragraph>
+            <Paragraph>{t("index.home.florida.brand_phrase")}</Paragraph>
           </Box>
         </Box>
       </Box>
