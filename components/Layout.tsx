@@ -18,19 +18,13 @@ import {
   Svg,
   Toggle,
   useTheme,
-  Select,
-  Option,
+  LanguageButton,
 } from "@cabezonidas/shop-ui";
 import { useGetPinnedPublicPathsQuery, useMeQuery } from "../graphql-queries";
 import { usePostMapping } from "../utils/helpers";
 import { companyName } from "../utils/config";
-import {
-  toggleDarkMode,
-  prependLocaleFlag,
-  setLanguage,
-  getLanguage,
-} from "../lib/localStorage";
-import { theme } from "@cabezonidas/shop-ui/lib/theme/theme";
+import { toggleDarkMode } from "../lib/darkMode";
+import Cookie from "js-cookie";
 
 type Props = {
   documentTitle?: string | null;
@@ -70,7 +64,7 @@ const Layout = React.forwardRef<
   React.ComponentProps<typeof Box> & Props
 >((props, ref) => {
   const { documentTitle, children, onMainScrollBottom, ...boxProps } = props;
-  const { t, i18n, languages } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { getPostTitle } = usePostMapping();
   i18n.addResourceBundle(
     "en-US",
@@ -93,6 +87,10 @@ const Layout = React.forwardRef<
   const logged = !!meData?.me;
 
   const { mode, setThemeMode } = useTheme();
+
+  React.useEffect(() => {
+    Cookie.set("language", i18n.language);
+  }, [i18n.language]);
 
   return (
     <>
@@ -207,28 +205,7 @@ const Layout = React.forwardRef<
                   setThemeMode(newMode);
                 }}
               />
-              <Select
-                id="language"
-                value={getLanguage()}
-                onChange={(e) => {
-                  const lng = e.target.value;
-                  setLanguage(lng);
-                  i18n.changeLanguage(lng);
-                }}
-                aria-label={t("layout.footer.language")}
-                style={{
-                  marginRight: "auto",
-                  width: "max-content",
-                  // color: theme.colors.neutral.darkest,
-                  color: theme.colors.neutral.lightest,
-                }}
-              >
-                {languages.map((l) => (
-                  <Option key={l.localeId} value={l.localeId}>
-                    {prependLocaleFlag(l.localeId, l.name)}
-                  </Option>
-                ))}
-              </Select>
+              <LanguageButton style={{ maxWidth: "max-content" }} />
               <FooterLink href="mailto:latamtradingclub@gmail.com">
                 <Email />
               </FooterLink>
