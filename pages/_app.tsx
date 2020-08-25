@@ -6,9 +6,11 @@ import "@reach/dialog/styles.css";
 import "@reach/combobox/styles.css";
 import "highlight.js/styles/default.css";
 import "@cabezonidas/shop-ui/assets/style.css";
+import "@reach/menu-button/styles.css";
 import "./../styles.css";
 import { withApollo } from "../lib/apolloClient";
 import "../utils/i18n";
+import { languages } from "../utils/i18n";
 
 function MyApp({
   Component,
@@ -18,7 +20,11 @@ function MyApp({
 }: AppProps & { apolloClient: any; cookies: any }) {
   return (
     <ApolloProvider client={apolloClient}>
-      <UiProvider suspense={false} mode={cookies.darkMode}>
+      <UiProvider
+        suspense={false}
+        mode={cookies.darkMode}
+        languages={languages}
+      >
         <Component {...pageProps} />
       </UiProvider>
     </ApolloProvider>
