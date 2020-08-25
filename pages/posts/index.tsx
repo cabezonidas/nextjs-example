@@ -99,7 +99,7 @@ const IndexPage = ({
 
         {!olderPosts.length && !translatedLatest && (
           <Box textAlign="center" my="6">
-            {t("index.noEntries")}
+            {t("index.no_entries")}
           </Box>
         )}
       </Box>

@@ -121,16 +121,20 @@ const StyledSection = styled(Section)<{ url: string }>(({ url }) => ({
   },
 }));
 
-const Title = styled(H1)(() => ({
+const Title = styled(H1)(({ theme: { mode, colors } }) => ({
   textTransform: "uppercase",
   fontWeight: "bold",
-  textShadow: "0px 2px 2px rgb(103 102 102 / 37%)",
+  color: mode === "light" ? colors.neutral.light : colors.neutral.darkest,
+  textShadow:
+    mode === "light" ? "0px 2px 2px rgb(103 102 102 / 37%)" : undefined,
 }));
 
-const SubTitle = styled(H2)((props) => ({
+const SubTitle = styled(H2)(({ theme: { space, mode, colors } }) => ({
   fontWeight: "bold",
   textTransform: "uppercase",
-  textShadow: "0px 2px 2px rgb(103 102 102 / 37%)",
-  padding: props.theme.space[3],
+  color: mode === "light" ? colors.neutral.light : colors.neutral.darkest,
+  textShadow:
+    mode === "light" ? "0px 2px 2px rgb(103 102 102 / 37%)" : undefined,
+  padding: space[3],
   fontSize: "unset",
 }));
