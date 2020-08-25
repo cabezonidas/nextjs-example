@@ -5,6 +5,7 @@ import {
 } from "@cabezonidas/shop-ui";
 import { Title, Post, PostData } from "../graphql-queries";
 import cookie from "cookie";
+import React from "react";
 
 export const usePostMapping = () => {
   const {
@@ -98,4 +99,17 @@ export const setState = (callback: (prev: State) => State) => {
     localStorage.setItem("language", language);
   }
   return { darkMode, language };
+};
+
+export const useIsMounted = () => {
+  const ref = React.useRef(false);
+  const [, setIsMounted] = React.useState(false);
+  React.useEffect(() => {
+    ref.current = true;
+    setIsMounted(true);
+    return () => {
+      ref.current = false;
+    };
+  }, []);
+  return () => ref.current;
 };

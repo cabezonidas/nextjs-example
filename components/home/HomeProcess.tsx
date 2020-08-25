@@ -11,6 +11,7 @@ import { useInView } from "react-intersection-observer";
 import { useState, useRef, useEffect, Fragment } from "react";
 import { keyframes } from "@emotion/core";
 import { companyName } from "../../utils/config";
+import { useIsMounted } from "../../utils/helpers";
 
 const esAr = {
   title: "Proceso de inversión",
@@ -77,20 +78,25 @@ export const HomeProcess = () => {
     { text: t("index.step6"), color: "#b07ba2" },
     { text: t("index.step7"), color: "#b1ba71" },
   ];
+  const isMounted = useIsMounted();
 
   // TODO Clean state, check mounted
   useEffect(() => {
     const breathing = () => {
       setGrowing(false);
       setTimeout(() => {
-        setGrowing(true);
+        if (isMounted()) {
+          setGrowing(true);
+        }
       }, holdTime + breath);
       setStep((s) => s + 1);
     };
 
     breathing();
     const interval = setInterval(() => {
-      breathing();
+      if (isMounted()) {
+        breathing();
+      }
     }, totalTime);
 
     return () => {
