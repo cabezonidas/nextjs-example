@@ -46,7 +46,7 @@ const enUs = {
 
 export const HomeFlorida = () => {
   const { t, i18n } = useTranslation();
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
 
   i18n.addResourceBundle("en-US", "translation", { index: enUs }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { index: esAr }, true, true);
@@ -138,8 +138,14 @@ export const HomeFlorida = () => {
       </Box>
       <Box height="100%" display="grid">
         <Box
-          bg={colors.neutral.lightest}
-          color={colors.neutral.darkest}
+          bg={
+            mode === "light"
+              ? colors.neutral.lightest
+              : colors.neutral.mediumDark
+          }
+          color={
+            mode === "light" ? colors.neutral.darkest : colors.neutral.lightest
+          }
           fontSize={[1, 2]}
           display="flex"
           p={[4, 5, 6, 7, 8]}
@@ -157,8 +163,10 @@ export const HomeFlorida = () => {
           </Box>
         </Box>
         <Box
-          bg={colors.neutral.light}
-          color={colors.neutral.darkest}
+          bg={mode === "light" ? colors.neutral.light : colors.neutral.dark}
+          color={
+            mode === "light" ? colors.neutral.dark : colors.neutral.lightest
+          }
           fontSize={[1, 2]}
           display="flex"
           p={[4, 5, 6, 7, 8]}

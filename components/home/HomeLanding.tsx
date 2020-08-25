@@ -131,7 +131,6 @@ const SubTitle = styled(H2)((props) => ({
   fontWeight: "bold",
   textTransform: "uppercase",
   textShadow: "0px 2px 2px rgb(103 102 102 / 37%)",
-  color: props.theme.colors.primary.lightest,
   padding: props.theme.space[3],
   fontSize: "unset",
 }));

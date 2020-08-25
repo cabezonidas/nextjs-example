@@ -102,12 +102,13 @@ export const HomeHow = () => {
   );
 };
 
-const StyledSection = styled(Section)(({ theme: { colors } }) => ({
+const StyledSection = styled(Section)(({ theme: { mode } }) => ({
   textAlign: "center",
-  color: colors.neutral.dark,
   position: "relative",
-  backgroundColor: "#f5f5f5",
-  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='693' height='693' viewBox='0 0 200 200'%3E%3Cpolygon fill='%23f0f0f0' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E")`,
+  backgroundColor: mode === "light" ? "#f5f5f5" : `#363a3ee6`,
+  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='693' height='693' viewBox='0 0 200 200'%3E%3Cpolygon fill='${
+    mode === "light" ? "%23f0f0f0" : "%23363a3e"
+  }' points='100 0 0 100 100 100 100 200 200 100 200 0'/%3E%3C/svg%3E")`,
 }));
 
 const UnorderedList = styled(Box.withComponent("ul"))<{ inView?: boolean }>(
@@ -134,6 +135,7 @@ const Card = styled(Box.withComponent("li"))(
     alignSelf: "center",
     border: `1px solid ${colors.secondary.darkest}`,
     background: colors.neutral.lightest,
+    color: colors.neutral.darkest,
     borderRadius: 5,
     boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
     display: "grid",
